@@ -1,6 +1,6 @@
 {
   "name": "fitnesstracker",
-  "version": "0.0.0",
+  "version": "0.03",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
