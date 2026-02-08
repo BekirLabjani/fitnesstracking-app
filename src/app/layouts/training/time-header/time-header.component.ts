@@ -8,12 +8,12 @@ import { Component, EventEmitter , Input,Output } from '@angular/core';
   styleUrl: './time-header.component.scss'
 })
 export class TimeHeaderComponent {
- @Input() selectedPeriod: 'today' | 'week' | 'month' | 'year' = 'today';
+ @Input() selectedPeriod: 'week' | 'month' | 'year' = 'week';
 
-@Output() tabChange = new EventEmitter<'today' | 'week' | 'month' | 'year'>();
+@Output() tabChange = new EventEmitter< 'week' | 'month' | 'year'>();
 
 
- selectTab(tab: 'today' | 'week' | 'month' | 'year'){
+ selectTab(tab: 'week' | 'month' | 'year'){
   this.tabChange.emit(tab); 
  }
 

@@ -15,7 +15,7 @@ const CURRENT_USER_ID = 'uid_bekir_001';
 
 type ExerciseId = keyof typeof EXERCISES;
 
-type Period = 'today' | 'week' | 'month' | 'year';
+type Period =  'week' | 'month' | 'year';
 
 interface ChartPoint {
   label: string;
