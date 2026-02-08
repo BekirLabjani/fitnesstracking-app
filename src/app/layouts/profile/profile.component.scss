@@ -1,0 +1,247 @@
+.profile-page {
+  padding: 24px;
+  background: #8f8f8f57;
+  min-height: 100vh;
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  transition: transform 0.35s ease;
+}
+
+.avatar-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 500  px;
+
+  background: #0f172a;
+  border-radius: 20px 20px 0 0;
+
+  overflow-y: auto; // ✅ EINZIGER Scroll-Container
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+
+  padding-bottom: 110px; // 👈 Platz für profile-actions
+
+  transform: translateY(100%);
+  transition: transform 0.35s ease;
+  z-index: 1000;
+}
+
+.sheet-close {
+  position: absolute;              // 🔑 WICHTIG
+  top: 10px;                    // 50px Header + 12px Abstand
+  right: 12px;
+
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+
+  border: none;
+  background: transparent;
+  color: #e5e7eb;
+
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  backdrop-filter: blur(6px);
+  z-index: 2000;                // über allem
+
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
+}
+.sheet.open {
+  transform: translateY(0);
+}
+
+.sheet-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.sheet-close:active {
+  transform: scale(0.92);
+}
+
+/* ===============================
+   PROFILE HEADER CARD
+   =============================== */
+
+.profile-header {
+  background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+  border-radius: 20px;
+  padding: 24px 20px 20px;
+  color: #f9fafb;
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  width: 86%;
+  margin: auto;
+  position: relative;
+  margin-top: 10px;
+}
+
+/* ===============================
+   AVATAR
+   =============================== */
+
+.avatar-section {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #0f172a;
+  border: 3px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+/* Edit Button */
+.edit-btn {
+  position: absolute;
+  right: calc(50% - 48px);
+  bottom: -4px;
+  transform: translateX(50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.6);
+}
+
+/* ===============================
+   USER INFO
+   =============================== */
+
+.user-info {
+  text-align: center;
+
+  h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 6px 0 2px;
+    letter-spacing: 0.2px;
+  }
+
+  .email {
+    font-size: 13px;
+    color: #9ca3af;
+    margin-bottom: 14px;
+  }
+}
+
+.contact-row {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  font-size: 13px;
+  color: #d1d5db;
+
+  .contact {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 0.9;
+  }
+}
+
+/* ===============================
+   STATS GRID
+   =============================== */
+
+.stats-grid {
+  margin-top: 18px;
+  background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+  color: white;
+  border-radius: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  overflow: hidden;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4);
+  width: 96%;
+  margin: auto;
+  margin-top: 40px;
+}
+
+.stat {
+  padding: 18px 8px;
+  text-align: center;
+  position: relative;
+
+  /* Subtile Trennlinien */
+  &::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 auto;
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto auto;
+    width: 1px;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  &:nth-child(3n)::before {
+    display: none;
+  }
+
+  &:nth-last-child(-n + 3)::after {
+    display: none;
+  }
+
+  strong {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    letter-spacing: 0.3px;
+  }
+
+  span {
+    font-size: 12px;
+    color: #9ca3af;
+    line-height: 1.2;
+  }
+}

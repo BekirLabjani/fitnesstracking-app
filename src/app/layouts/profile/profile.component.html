@@ -1,0 +1,40 @@
+<!-- BACKDROP -->
+<div class="profile-page" *ngIf="open" (click)="close.emit()"></div>
+
+<!-- SHEET -->
+<div class="sheet" [class.open]="open" (click)="$event.stopPropagation()">
+
+  <!-- Avatar -->
+  <div class="profile-header">
+      <button
+    class="sheet-close"
+    aria-label="Profil schließen"
+    (click)="close.emit()"
+  >
+    ✕
+  </button>
+    <!-- Avatar + Edit -->
+    <div class="avatar-section">
+      <div class="avatar">
+        <img src="/assets/img/ChatGPT Image 2. Feb. 2026, 12_57_43.png" alt="Profile" />
+      </div>
+
+      <button class="edit-btn">✎</button>
+    </div>
+
+    <!-- Name + Email -->
+    <div class="user-info">
+      <h2>{{ user.displayName }}</h2>
+      <!-- <p class="email">jamienelson12@gmail.com</p> -->
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-grid">
+    <div class="stat">
+      <strong>85 Kg</strong>
+      <span>Current Weight</span>
+    </div>
+  </div>
+  <app-navbar></app-navbar>
+</div>

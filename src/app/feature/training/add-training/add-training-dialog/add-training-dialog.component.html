@@ -1,0 +1,70 @@
+<div class="add-section">
+  <div class="header-dialog">
+    <h3>Add Training</h3>
+
+    <button
+      class="close-btn"
+      type="button"
+      (click)="openDialog()"
+      aria-label="Close dialog"
+    >
+      ✕
+    </button>
+  </div>
+
+  <div class="content">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Trainingseinheit</mat-label>
+
+      <mat-select [(value)]="selectedExerciseId">
+        <mat-option *ngFor="let ex of exerciseOptions" [value]="ex.id">
+          {{ ex.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="wight">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>KG</mat-label>
+      <input matInput placeholder="z. B. KG" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>WDH</mat-label>
+      <input matInput placeholder="z. B. Wiederholung" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Sätze</mat-label>
+      <input matInput placeholder="z. B. Sätze" />
+    </mat-form-field>
+  </div>
+  <div class="add-new-unit">
+    <button
+      class="add-new-unit-btn"
+      type="button"
+      (click)="addNewUnit()"
+      aria-label=""
+    >
+      <svg
+        width="32"
+        height="32"
+        viewBox="0 0 64 64"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle cx="32" cy="32" r="32" fill="transparent" />
+        <path
+          d="M32 18V46"
+          stroke="white"
+          stroke-width="4"
+          stroke-linecap="round"
+        />
+        <path
+          d="M18 32H46"
+          stroke="white"
+          stroke-width="4"
+          stroke-linecap="round"
+        />
+      </svg>
+      <span>Add</span>
+    </button>
+  </div>
+</div>

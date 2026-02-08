@@ -1,0 +1,85 @@
+section {
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: #131533;
+  padding: 16px;
+}
+
+mat-card {
+  margin-top: 20px;
+  width: 90%;
+  height: 120px;
+  border-radius: 20px;
+  border: none;
+  background-color: white;
+}
+
+//-----------------------------CARD ----------------------
+.training-card {
+  background: #ffffff;
+  padding: 16px;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  //----------------- der Browser denkt, der Text ist selektierbar / editierbar.-------------
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  //----------------------------------------------------------
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .exercise {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    .date {
+      font-size: 13px;
+      color: #64748b;
+    }
+  }
+
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .stats {
+      font-size: 16px;
+      font-weight: 500;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      .weight {
+        font-weight: 700;
+      }
+
+      .divider {
+        color: #94a3b8;
+      }
+    }
+
+    .progress {
+      font-size: 14px;
+      font-weight: 500;
+
+      &.up {
+        color: #16a34a;
+      }
+
+      &.down {
+        color: #dc2626;
+      }
+    }
+  }
+}

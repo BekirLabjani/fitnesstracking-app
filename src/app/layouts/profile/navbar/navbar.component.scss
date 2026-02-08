@@ -1,0 +1,56 @@
+.profile-actions {
+  position: fixed;
+  bottom: 15px;
+  height: 60px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  background-color: #151e43;
+  margin: auto;
+  left: 10px;
+  right: 10px;
+  border-radius: 10px;
+  justify-content: space-between;
+  padding-inline: 20px;
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -webkit-tap-highlight-color: transparent; // 🔴 entfernt Mobile-Grau
+}
+.action-item {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: #e5e7eb;
+  padding: 12px 6px;
+  border-radius: 14px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+
+  .icon {
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  .label {
+    font-size: 11px;
+    color: #9ca3af;
+    white-space: nowrap;
+  }
+}

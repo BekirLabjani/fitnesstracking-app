@@ -1,0 +1,23 @@
+<app-training-header></app-training-header>
+<app-training-nav-bar  [class.nav-hidden]="isMenuOpen" 
+  (tabChange)="onTabChange($event)" [activeTab]="activeTab"> </app-training-nav-bar>
+<div class="training-content">
+
+  <app-training-strength
+    *ngIf="activeTab === 'strength'">
+  </app-training-strength>
+
+  <app-training-cardio
+    *ngIf="activeTab === 'cardio'">
+  </app-training-cardio>
+
+  <app-training-body
+    *ngIf="activeTab === 'body'">
+  </app-training-body>
+
+  <app-training-stats
+    *ngIf="activeTab === 'stats'">
+  </app-training-stats>
+
+</div>
+<app-nav-bottom></app-nav-bottom>

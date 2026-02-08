@@ -1,0 +1,193 @@
+nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  height: 90px;
+  background: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.08);
+  z-index: 100;
+  font-family: "Inter";
+  font-size: 15px;
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -webkit-tap-highlight-color: transparent; // 🔴 entfernt Mobile-Grau
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  background: linear-gradient(to top, #0b0f2a, #13194a);
+
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.4);
+}
+
+.nav-item {
+  background: none;
+  border: none;
+  color: #8b8fb3;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+
+  font-size: 12px;
+  cursor: pointer;
+
+  svg {
+    width: 26px;
+    height: 26px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+  }
+
+  &.active {
+    color: #5bbcff;
+  }
+}
+.nav-spacer {
+  width: 60px;
+}
+.nav-icon {
+  width: 26px;
+  height: 26px;
+
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+
+.active {
+  color: #2f68bf;
+  scale: 1.1;
+}
+
+/* ➕ Floating Add Button */
+.nav-add {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%) scale(1);
+
+  width: 74px;
+  height: 74px;
+
+  border-radius: 50%;
+  border: none;
+  background: none;
+
+  cursor: pointer;
+  outline: none;
+
+  -webkit-tap-highlight-color: transparent;
+
+  box-shadow: 0 10px 30px rgba(47, 104, 191, 0.4);
+
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+
+  svg {
+    width: 64px;
+    height: 64px;
+
+    circle {
+      fill: #2f68bf;
+    }
+
+    path {
+      stroke: #ffffff;
+      stroke-width: 4;
+      stroke-linecap: round;
+    }
+  }
+
+  &:active {
+    transform: translateX(-50%) scale(0.9);
+    box-shadow: 0 6px 18px rgba(47, 104, 191, 0.3);
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    box-shadow:
+      0 0 0 4px rgba(255, 255, 255, 0.9),
+      0 0 0 7px rgba(47, 104, 191, 0.5),
+      0 10px 30px rgba(47, 104, 191, 0.4);
+  }
+}
+
+
+.add-menu-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: 98;
+}
+
+.add-menu {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px) scale(0.95);
+
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 8px;
+  width: 220px;
+
+  z-index: 99;
+
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+
+  animation: popIn 0.15s ease-out forwards;
+}
+
+.add-menu button {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  background: transparent;
+
+  font-size: 15px;
+  text-align: left;
+
+  cursor: pointer;
+
+  transition: background 0.12s ease, transform 0.12s ease;
+
+  &:hover {
+    background: #f2f4f7;
+  }
+
+  &:active {
+    transform: scale(0.97);
+    background: #e9eef5;
+  }
+}
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}

@@ -1,0 +1,90 @@
+header {
+  display: flex;
+  align-items: center;
+  padding-inline: 30px;
+  height: 90px;
+  justify-content: space-between;
+  background-color: #2f68bf;
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+//-----------------User-icon---------------------
+.profile-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background-color: #ffffff;
+  color: #1e3a8a;
+  font-size: 16px;
+  font-weight: 600;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  outline: none;
+  -webkit-tap-highlight-color: transparent; // 🔴 entfernt Mobile-Grau
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.16);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  /* 🔵 Nur Tastatur-Fokus */
+  &:focus-visible {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5),
+      0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 180%;
+  right: -27px;
+  margin-top: -3px;
+  margin-top: -3px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  min-width: 150px;
+  z-index: 1000;
+  opacity: 0;
+  transform: translateY(-20px);
+  pointer-events: none;
+  transition: all 0.3s ease-in-out;
+}
+
+.dropdown-menu.menu-open {
+  opacity: 1; /* Sichtbar */
+  transform: translateY(0); /* Zurück auf Originalposition */
+  pointer-events: auto;
+}
+.dropdown-menu ul {
+  list-style: none;
+  padding: 10px 0;
+  margin: 0;
+}
+
+.dropdown-menu li {
+  padding: 10px 20px;
+  cursor: pointer;
+  color: #333;
+}
+
+.dropdown-menu li:hover {
+  background-color: #f0f0f0; /* Grauer Hover-Effekt wie in Apps üblich */
+}
+.profile-menu-container {
+  position: relative; // 🎯 Anker
+}

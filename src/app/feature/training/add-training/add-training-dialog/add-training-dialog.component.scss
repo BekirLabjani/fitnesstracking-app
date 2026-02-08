@@ -1,0 +1,130 @@
+.add-section{
+      width: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #e9e8e89d;
+    user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+
+.mat-mdc-form-field{
+    display: flex;
+    align-items: center;
+    width: 90%;
+    margin: auto;
+    padding: 10px;
+    
+}
+
+.header-dialog{
+      height: 56px;
+  padding: 0 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: #2f68bf;
+  color: white;
+
+  h3{
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+  }
+}
+::ng-deep .mat-mdc-dialog-container {
+  border-radius: 14px;
+  overflow: hidden;
+  padding: 0;
+}
+
+.close-btn {
+  width: 28px;
+  height: 28px;
+
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent; // 🔴 entfernt Mobile-Grau
+
+  cursor: pointer;
+  border: none;
+
+  transition: background 0.15s ease, transform 0.15s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
+}
+
+.wight{ 
+    display: flex;
+}
+
+.add-new-unit {
+  display: flex;
+  align-items: center;
+  height: 56px;
+  padding: 0 16px;
+  justify-content: space-between;
+
+  > button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    border: 1px solid #2f68bf;
+    background-color: #2f68bf;
+    color: white;
+
+    padding: 6px 10px;
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    // 🔴 entfernt Mobile Touch Grau
+    -webkit-tap-highlight-color: transparent;
+
+    // 🔥 Animation Basis
+    transition:
+      transform 0.12s ease,
+      box-shadow 0.12s ease,
+      background-color 0.12s ease;
+
+    // 🟦 Hover (Desktop)
+    &:hover {
+      background-color: #285aa8;
+      box-shadow: 0 4px 10px rgba(47, 104, 191, 0.35);
+    }
+
+    // 👆 Click / Tap Feedback
+    &:active {
+      transform: scale(0.96);
+      box-shadow: 0 2px 6px rgba(47, 104, 191, 0.25);
+      background-color: #244f92;
+    }
+
+    // ❌ Fokus-Rahmen entfernen
+    &:focus {
+      outline: none;
+    }
+  }
+}
+

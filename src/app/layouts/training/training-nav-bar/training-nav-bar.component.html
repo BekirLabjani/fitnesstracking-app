@@ -1,0 +1,37 @@
+<nav class="training-tabs">
+  <button
+    class="tab"
+    [class.active]="activeTab === 'strength'"
+    (click)="selectTab('strength')"
+  >
+    Kraft
+    <span class="underline" [class.active]="activeTab === 'strength'"></span>
+  </button>
+
+  <button
+    class="tab"
+    [class.active]="activeTab === 'cardio'"
+    (click)="selectTab('cardio')"
+  >
+    Cardio
+    <span class="underline"></span>
+  </button>
+
+  <button
+    class="tab"
+    [class.active]="activeTab === 'body'"
+    (click)="selectTab('body')"
+  >
+    Gewicht
+    <span class="underline"></span>
+  </button>
+
+   <button
+    class="tab"
+    [class.active]="activeTab === 'stats'"
+    (click)="selectTab('stats')"
+  >
+    Stats
+    <span class="underline"></span>
+  </button>
+</nav>

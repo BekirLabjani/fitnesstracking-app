@@ -1,0 +1,42 @@
+
+<div class="app-layout">
+<app-header (toggleProfile)="toggleProfileSheet()"></app-header>
+
+  <main class="app-content">
+    <section>
+      <section>
+    <mat-card appearance="outlined">
+  <mat-card-header>
+  <div class="training-card">
+  <div class="card-header">
+    <div class="exercise">
+      Bankdrücken
+    </div>
+    <div class="date">
+      Heute
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="stats">
+      <span class="weight">42 kg</span>
+      <span class="divider">×</span>
+      <span>10</span>
+      <span class="divider">×</span>
+      <span>3 Sätze</span>
+    </div>
+
+    <div class="progress up">
+      ↑ +2 kg Steigerung
+    </div>
+  </div>
+</div>
+  </mat-card-header>
+</mat-card>
+</section>
+    </section>
+  </main>
+
+  <app-nav-bottom></app-nav-bottom>
+</div>
+<app-profile [open]="isSheetOpen" (close)="isSheetOpen = false"></app-profile>

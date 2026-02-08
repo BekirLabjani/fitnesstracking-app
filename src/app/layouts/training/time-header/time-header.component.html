@@ -1,0 +1,28 @@
+<nav class="training-tabs">
+  <button
+    class="tab"
+    [class.active]="selectedPeriod === 'week'"
+    (click)="selectTab('week')"
+  >
+    Woche
+    <span class="underline"></span>
+  </button>
+
+  <button
+    class="tab"
+    [class.active]="selectedPeriod === 'month'"
+    (click)="selectTab('month')"
+  >
+    Monat
+    <span class="underline"></span>
+  </button>
+
+  <button
+    class="tab"
+    [class.active]="selectedPeriod === 'year'"
+    (click)="selectTab('year')"
+  >
+    Jahr
+    <span class="underline"></span>
+  </button>
+</nav>

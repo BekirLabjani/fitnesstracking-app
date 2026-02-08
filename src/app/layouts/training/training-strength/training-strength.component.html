@@ -1,0 +1,32 @@
+<!-- <div class="strength-page">
+  <div class="exercise-select">
+    <label>Übung auswählen</label>
+
+    <select [(ngModel)]="selectedExerciseId">
+      <option *ngFor="let ex of exercises" [value]="ex.id">
+        {{ ex.name }}
+      </option>
+    </select>
+  </div>
+
+  <div class="">
+    @if (selectedExercise) {
+      <h2>{{ selectedExercise.name }}</h2>
+      <p></p>
+    } @else {
+      <p>Bitte wähle eine Übung aus</p>
+    }
+  </div>
+  <app-time-header
+    [selectedPeriod]="selectedPeriod"
+    (tabChange)="onPeriodChange($event)"
+  >
+  </app-time-header>
+  <p></p>
+
+  <div style="height: 250px">
+    <canvas baseChart [type]="'bar'" [data]="chartData"> </canvas>
+  </div>
+
+
+</div> -->

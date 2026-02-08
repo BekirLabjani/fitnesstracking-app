@@ -1,6 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { appConfig } from './app/app.config';
 import { AppComponent } from './app/app.component';
+import { appConfig } from './app/app.config';
+
+import { Chart, registerables } from 'chart.js';
+
+// 🔑 GANZ WICHTIG: Chart.js initialisieren
+Chart.register(...registerables);
 
 bootstrapApplication(AppComponent, appConfig)
-  .catch((err) => console.error(err));
+  .catch(err => console.error(err));

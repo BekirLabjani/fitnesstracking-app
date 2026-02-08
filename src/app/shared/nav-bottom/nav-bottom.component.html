@@ -1,0 +1,46 @@
+<nav class="bottom-nav">
+  <button
+    class="nav-item"
+    routerLink="/dashboard"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }"
+  >
+ <svg viewBox="0 0 24 24">
+      <path d="M3 10.5L12 3L21 10.5V20H5V10.5Z" />
+    </svg>
+    <span>Home</span>
+  </button>
+
+  <div class="nav-spacer"></div>
+
+  <button class="nav-item" routerLink="/training" routerLinkActive="active">
+    <svg viewBox="0 0 24 24">
+      <path d="M3 9V15M7 7V17M17 7V17M21 9V15M7 12H17" />
+    </svg>
+    Training
+  </button>
+
+  <button class="nav-add"
+ (mousedown)="startPress($event)"
+  (mouseup)="endPress($event)"
+  (mouseleave)="endPress($event)"
+  (touchstart)="startPress($event)"
+  (touchend)="endPress($event)"
+
+  >
+    <svg viewBox="0 0 56 56">
+      <circle cx="28" cy="28" r="28" />
+      <path d="M28 18V38M18 28H38" />
+    </svg>
+  </button>
+</nav>
+<div
+  class="add-menu-backdrop"
+  *ngIf="showAddMenu"
+  (click)="closeAddMenu()"
+></div>
+
+<div class="add-menu" *ngIf="showAddMenu" (click)="$event.stopPropagation()">
+  <button (click)="openDialog(); closeAddMenu()">➕ Add Training</button>
+  <button (click)="openAddUnitDialog(); closeAddMenu()">🏋️ Add New Unit</button>
+</div>
