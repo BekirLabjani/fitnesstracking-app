@@ -1,12 +1,40 @@
-import { Component } from '@angular/core';
 import { Routes } from '@angular/router';
-import { DashboardComponent } from './layouts/dashboard/dashboard.component';
-import { TrainingComponent } from './layouts/training/training.component';
-import { ProfileComponent } from './layouts/profile/profile.component';
+import { authGuard } from './auth/guards/auth.guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, // Ohne diese Zeile weiß Angular nicht: Welche Seite soll ich zeigen, wenn jemand die App öffnet?
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'training', component: TrainingComponent },
-  { path: 'profile', component: ProfileComponent },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  {
+    path: 'login',
+    loadComponent: () => import('./auth/pages/login/login.component').then(m => m.LoginComponent),
+  },
+  {
+    path: 'signup',
+    loadComponent: () => import('./auth/pages/signup/signup.component').then(m => m.SignupComponent),
+  },
+  {
+    path: 'dashboard',
+    loadComponent: () => import('./layouts/dashboard/dashboard.component').then(m => m.DashboardComponent),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'training',
+    loadComponent: () => import('./layouts/training/training.component').then(m => m.TrainingComponent),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'profile',
+    loadComponent: () => import('./layouts/profile/profile.component').then(m => m.ProfileComponent),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'settings',
+    loadComponent: () => import('./layouts/settings/settings.component').then(m => m.SettingsComponent),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'trainingsplan',
+    loadComponent: () => import('./layouts/trainingsplan/trainingsplan.component').then(m => m.TrainingsplanComponent),
+    canActivate: [authGuard],
+  },
+  { path: '**', redirectTo: 'login' },
 ];

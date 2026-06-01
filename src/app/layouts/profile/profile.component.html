@@ -4,37 +4,43 @@
 <!-- SHEET -->
 <div class="sheet" [class.open]="open" (click)="$event.stopPropagation()">
 
-  <!-- Avatar -->
+  <button class="sheet-close" (click)="close.emit()">✕</button>
+
   <div class="profile-header">
-      <button
-    class="sheet-close"
-    aria-label="Profil schließen"
-    (click)="close.emit()"
-  >
-    ✕
-  </button>
-    <!-- Avatar + Edit -->
     <div class="avatar-section">
-      <div class="avatar">
-        <img src="/assets/img/ChatGPT Image 2. Feb. 2026, 12_57_43.png" alt="Profile" />
+
+      <input #fileInput type="file" accept="image/*" hidden (change)="onFileSelected($event)" />
+
+      <div class="avatar" (click)="onAvatarClick(fileInput)">
+        <img *ngIf="photoBase64 && !uploading" [src]="photoBase64" alt="Profilbild" />
+        <div *ngIf="!photoBase64 && !uploading" class="avatar-initials">
+          {{ displayName.slice(0, 2).toUpperCase() }}
+        </div>
+        <div *ngIf="uploading" class="avatar-uploading">⏳</div>
       </div>
 
-      <button class="edit-btn">✎</button>
+      <button class="edit-btn" (click)="onAvatarClick(fileInput)">✎</button>
     </div>
 
-    <!-- Name + Email -->
     <div class="user-info">
-      <h2>{{ user.displayName }}</h2>
-      <!-- <p class="email">jamienelson12@gmail.com</p> -->
+      <h2>{{ displayName }}</h2>
+      <p class="upload-error" *ngIf="uploadError">{{ uploadError }}</p>
+      <p class="upload-hint" *ngIf="!uploading && !uploadError">Foto tippen zum Ändern</p>
     </div>
   </div>
 
   <!-- Stats -->
   <div class="stats-grid">
     <div class="stat">
-      <strong>85 Kg</strong>
+      <strong>–</strong>
       <span>Current Weight</span>
     </div>
   </div>
+
   <app-navbar></app-navbar>
+
+  <button class="logout-btn" (click)="onLogout()">
+    <span class="logout-icon">🚪</span>
+    Abmelden
+  </button>
 </div>

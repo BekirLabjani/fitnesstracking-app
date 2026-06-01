@@ -1,1 +1,105 @@
-<p>training-stats works!</p>
+<div class="stats-page">
+
+  <!-- Sub-Tab Switcher -->
+  <div class="sub-tabs">
+    <button [class.active]="activeTab==='overview'" (click)="setTab('overview')">📊 Übersicht</button>
+    <button [class.active]="activeTab==='history'"  (click)="setTab('history')">📋 Verlauf</button>
+    <button [class.active]="activeTab==='calendar'" (click)="setTab('calendar')">📅 Kalender</button>
+  </div>
+
+  <!-- ── OVERVIEW ── -->
+  <ng-container *ngIf="activeTab === 'overview'">
+
+    <div class="kpi-grid">
+      <div class="kpi-card streak">
+        <span class="kpi-icon">🔥</span>
+        <span class="kpi-value">{{ streak }}</span>
+        <span class="kpi-label">Tage Streak</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-icon">🏋️</span>
+        <span class="kpi-value">{{ totalVolumeTons }}</span>
+        <span class="kpi-label">Tonnen</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-icon">📅</span>
+        <span class="kpi-value">{{ totalDays }}</span>
+        <span class="kpi-label">Trainingstage</span>
+      </div>
+      <div class="kpi-card top">
+        <span class="kpi-icon">🥇</span>
+        <span class="kpi-value top-exercise">{{ topExercise }}</span>
+        <span class="kpi-label">Top Übung</span>
+      </div>
+    </div>
+
+    <div class="section" *ngIf="allTrainings.length > 0">
+      <h3 class="section-title">📊 Trainingsfrequenz</h3>
+      <div style="height:180px">
+        <canvas baseChart [type]="'bar'" [data]="weeklyChartData"></canvas>
+      </div>
+    </div>
+
+    <div class="section" *ngIf="personalRecords.length > 0">
+      <h3 class="section-title">🏆 Persönliche Bestleistungen</h3>
+      <div class="pr-list">
+        <div class="pr-row" *ngFor="let pr of personalRecords; let i = index">
+          <span class="pr-rank">{{ i + 1 }}</span>
+          <span class="pr-name">{{ pr.exerciseName }}</span>
+          <span class="pr-weight">{{ pr.weight }} kg</span>
+          <span class="pr-date">{{ pr.date }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty" *ngIf="allTrainings.length === 0">
+      <p>🏋️ Noch keine Daten. Füge dein erstes Training hinzu!</p>
+    </div>
+  </ng-container>
+
+  <!-- ── HISTORY ── -->
+  <ng-container *ngIf="activeTab === 'history'">
+    <div class="history-list" *ngIf="recentHistory.length > 0">
+      <div class="history-item" *ngFor="let entry of recentHistory">
+        <div class="history-icon">{{ getTypeIcon(entry.type) }}</div>
+        <div class="history-info">
+          <span class="history-name">{{ getExerciseName(entry) }}</span>
+          <span class="history-detail">{{ getEntryDetail(entry) }}</span>
+          <span class="history-note" *ngIf="entry.notes">📝 {{ entry.notes }}</span>
+        </div>
+        <span class="history-date">{{ entry.date }}</span>
+      </div>
+    </div>
+    <div class="empty" *ngIf="recentHistory.length === 0">
+      <p>Noch keine Trainings gespeichert.</p>
+    </div>
+  </ng-container>
+
+  <!-- ── CALENDAR ── -->
+  <ng-container *ngIf="activeTab === 'calendar'">
+    <div class="calendar">
+      <div class="cal-header">
+        <button class="cal-nav" (click)="prevMonth()">‹</button>
+        <span class="cal-title">{{ calendarMonthLabel }}</span>
+        <button class="cal-nav" (click)="nextMonth()">›</button>
+      </div>
+
+      <div class="cal-grid">
+        <div class="cal-weekday" *ngFor="let d of weekDays">{{ d }}</div>
+        <div class="cal-cell"
+             *ngFor="let cell of calendarDays"
+             [class.has-training]="cell.hasTraining"
+             [class.today]="cell.isToday"
+             [class.empty-cell]="!cell.date">
+          <span *ngIf="cell.date">{{ cell.date.getDate() }}</span>
+          <span class="dot" *ngIf="cell.hasTraining"></span>
+        </div>
+      </div>
+
+      <div class="cal-legend">
+        <span class="dot-legend"></span> Trainingstag
+      </div>
+    </div>
+  </ng-container>
+
+</div>

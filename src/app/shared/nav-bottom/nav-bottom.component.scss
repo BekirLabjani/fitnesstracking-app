@@ -1,193 +1,116 @@
-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-
-  height: 90px;
-  background: #ffffff;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-
-  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.08);
-  z-index: 100;
-  font-family: "Inter";
-  font-size: 15px;
-  user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  -webkit-tap-highlight-color: transparent; // 🔴 entfernt Mobile-Grau
-}
-
 .bottom-nav {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 90px;
-  background: linear-gradient(to top, #0b0f2a, #13194a);
-
+  height: 76px;
+  background: rgba(13,22,40,0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255,255,255,0.06);
   display: flex;
   justify-content: space-around;
   align-items: center;
-  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.4);
+  z-index: 100;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .nav-item {
   background: none;
   border: none;
-  color: #8b8fb3;
-
+  color: #475569;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-
-  font-size: 12px;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 500;
   cursor: pointer;
+  padding: 6px 16px;
+  border-radius: 12px;
+  transition: color 0.2s ease;
 
   svg {
-    width: 26px;
-    height: 26px;
+    width: 24px;
+    height: 24px;
     stroke: currentColor;
     fill: none;
     stroke-width: 2;
   }
 
-  &.active {
-    color: #5bbcff;
-  }
-}
-.nav-spacer {
-  width: 60px;
-}
-.nav-icon {
-  width: 26px;
-  height: 26px;
-
-  stroke: currentColor;
-  stroke-width: 2;
-  fill: none;
+  &.active { color: #3B82F6; }
+  &:active { transform: scale(0.9); }
 }
 
-.active {
-  color: #2f68bf;
-  scale: 1.1;
-}
+.nav-spacer { width: 64px; }
 
-/* ➕ Floating Add Button */
 .nav-add {
   position: absolute;
-  top: -30px;
+  top: -28px;
   left: 50%;
-  transform: translateX(-50%) scale(1);
-
-  width: 74px;
-  height: 74px;
-
+  transform: translateX(-50%);
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   border: none;
   background: none;
-
   cursor: pointer;
   outline: none;
-
   -webkit-tap-highlight-color: transparent;
-
-  box-shadow: 0 10px 30px rgba(47, 104, 191, 0.4);
-
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  transition: transform 0.15s ease;
 
   svg {
-    width: 64px;
-    height: 64px;
-
-    circle {
-      fill: #2f68bf;
-    }
-
-    path {
-      stroke: #ffffff;
-      stroke-width: 4;
-      stroke-linecap: round;
-    }
+    width: 60px;
+    height: 60px;
+    filter: drop-shadow(0 6px 18px rgba(59,130,246,0.5));
+    circle { fill: #3B82F6; }
+    path { stroke: white; stroke-width: 3.5; stroke-linecap: round; }
   }
 
-  &:active {
-    transform: translateX(-50%) scale(0.9);
-    box-shadow: 0 6px 18px rgba(47, 104, 191, 0.3);
-  }
-
-  &:focus {
-    outline: none;
-  }
-
-  &:focus-visible {
-    box-shadow:
-      0 0 0 4px rgba(255, 255, 255, 0.9),
-      0 0 0 7px rgba(47, 104, 191, 0.5),
-      0 10px 30px rgba(47, 104, 191, 0.4);
-  }
+  &:active { transform: translateX(-50%) scale(0.88); }
 }
-
 
 .add-menu-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(6px);
   z-index: 98;
 }
 
 .add-menu {
   position: fixed;
-  bottom: 100px;
+  bottom: 96px;
   left: 50%;
-  transform: translateX(-50%) translateY(10px) scale(0.95);
-
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 8px;
+  transform: translateX(-50%);
+  background: #111E35;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  padding: 6px;
   width: 220px;
-
   z-index: 99;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  animation: slideUp 0.18s cubic-bezier(0.34,1.56,0.64,1);
 
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  button {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    font-weight: 500;
+    color: #E2E8F0;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.12s;
 
-  animation: popIn 0.15s ease-out forwards;
-}
-
-.add-menu button {
-  width: 100%;
-  padding: 14px;
-  border-radius: 12px;
-  border: none;
-  background: transparent;
-
-  font-size: 15px;
-  text-align: left;
-
-  cursor: pointer;
-
-  transition: background 0.12s ease, transform 0.12s ease;
-
-  &:hover {
-    background: #f2f4f7;
-  }
-
-  &:active {
-    transform: scale(0.97);
-    background: #e9eef5;
+    &:hover { background: rgba(59,130,246,0.1); color: #60A5FA; }
   }
 }
-@keyframes popIn {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(10px) scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0) scale(1);
-  }
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateX(-50%) translateY(14px) scale(0.92); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
 }

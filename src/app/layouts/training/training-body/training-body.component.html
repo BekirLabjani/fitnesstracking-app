@@ -1,1 +1,51 @@
-<p>training-body works!</p>
+<div class="body-page">
+
+  <!-- Aktuelles Gewicht -->
+  <div class="current-weight" *ngIf="latest !== null">
+    <span class="weight-value">{{ latest }} kg</span>
+    <span class="weight-label">Aktuelles Gewicht</span>
+  </div>
+
+  <!-- BMI Karte -->
+  <div class="bmi-card" *ngIf="latest !== null">
+
+    <!-- Körpergröße fehlt -->
+    <div *ngIf="!heightCm && !editingHeight" class="bmi-prompt">
+      <p>Gib deine Körpergröße ein für den BMI</p>
+      <button class="set-height-btn" (click)="editingHeight = true; heightInput = 170">Größe eingeben</button>
+    </div>
+
+    <!-- Größe eingeben -->
+    <div *ngIf="editingHeight" class="height-input-row">
+      <input type="number" [(ngModel)]="heightInput" placeholder="z.B. 180" min="100" max="250" />
+      <span class="unit">cm</span>
+      <button class="save-btn" (click)="saveHeight()">✓</button>
+    </div>
+
+    <!-- BMI anzeigen -->
+    <div *ngIf="heightCm && bmi !== null && !editingHeight" class="bmi-display">
+      <div class="bmi-row">
+        <div class="bmi-value">
+          <span class="bmi-number">{{ bmi }}</span>
+          <span class="bmi-unit">BMI</span>
+        </div>
+        <div class="bmi-info">
+          <span class="bmi-cat" [style.color]="bmiCategory.color">{{ bmiCategory.label }}</span>
+          <span class="bmi-height">{{ heightCm }} cm</span>
+        </div>
+        <button class="edit-height" (click)="editingHeight = true; heightInput = heightCm">✎</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leer -->
+  <div class="empty-state" *ngIf="entries.length === 0">
+    <p>Noch kein Gewicht eingetragen. Drücke + um dein Gewicht hinzuzufügen.</p>
+  </div>
+
+  <!-- Chart -->
+  <div style="height: 250px" *ngIf="entries.length > 0">
+    <canvas baseChart [type]="'line'" [data]="chartData" [options]="chartOptions"></canvas>
+  </div>
+
+</div>

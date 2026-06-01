@@ -1,23 +1,117 @@
+<!-- ── Aktions-Leiste ── -->
 <div class="profile-actions">
-
-  <button class="action-item">
+  <button class="action-item" (click)="goToSettings()">
     <span class="icon">⚙️</span>
     <span class="label">Settings</span>
   </button>
-
-  <button class="action-item">
+  <button class="action-item" (click)="openPanel('editProfile')">
     <span class="icon">✏️</span>
     <span class="label">Profil bearbeiten</span>
   </button>
-
-  <button class="action-item">
+  <button class="action-item" (click)="openPanel('security')">
     <span class="icon">🔒</span>
     <span class="label">Sicherheit</span>
   </button>
-
-  <button class="action-item">
+  <button class="action-item" (click)="openPanel('help')">
     <span class="icon">❓</span>
     <span class="label">Hilfe</span>
   </button>
+  <button class="action-item" (click)="openPanel('friends')">
+    <span class="icon">👥</span>
+    <span class="label">Freunde</span>
+  </button>
+</div>
+
+<!-- ── Panel-Bereich ── -->
+<div class="panel" *ngIf="activePanel !== 'none'">
+
+  <!-- Profil bearbeiten -->
+  <ng-container *ngIf="activePanel === 'editProfile'">
+    <h4 class="panel-title">✏️ Profil bearbeiten</h4>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Anzeigename</mat-label>
+      <input matInput [(ngModel)]="newName" />
+    </mat-form-field>
+    <p class="success" *ngIf="editSuccess">{{ editSuccess }}</p>
+    <p class="error" *ngIf="editError">{{ editError }}</p>
+    <button mat-flat-button color="primary" (click)="saveName()">Speichern</button>
+  </ng-container>
+
+  <!-- Sicherheit -->
+  <ng-container *ngIf="activePanel === 'security'">
+    <h4 class="panel-title">🔒 Sicherheit</h4>
+    <ng-container *ngIf="!resetSent">
+      <p class="panel-desc">Wir senden dir einen Link zum Zurücksetzen deines Passworts.</p>
+      <button mat-flat-button color="primary" (click)="sendReset()">Passwort zurücksetzen</button>
+      <p class="error" *ngIf="securityError">{{ securityError }}</p>
+    </ng-container>
+    <p class="success" *ngIf="resetSent">✅ E-Mail gesendet! Bitte prüfe dein Postfach.</p>
+  </ng-container>
+
+  <!-- Hilfe -->
+  <ng-container *ngIf="activePanel === 'help'">
+    <h4 class="panel-title">❓ Hilfe</h4>
+    <div class="faq">
+      <div class="faq-item">
+        <strong>Wie füge ich ein Training hinzu?</strong>
+        <p>Drücke das + unten und wähle Kraft, Cardio oder Gewicht.</p>
+      </div>
+      <div class="faq-item">
+        <strong>Wie vergleiche ich mich mit Freunden?</strong>
+        <p>Gehe zu „Freunde", teile deinen Code und füge Freunde hinzu.</p>
+      </div>
+      <div class="faq-item">
+        <strong>Wo sehe ich meine Fortschritte?</strong>
+        <p>Im Training-Tab unter Kraft/Cardio/Gewicht siehst du Charts.</p>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Freunde -->
+  <ng-container *ngIf="activePanel === 'friends'">
+    <h4 class="panel-title">👥 Freunde</h4>
+
+    <!-- Eigener Code -->
+    <div class="invite-section">
+      <p class="panel-desc">Dein Einladungscode:</p>
+      <div class="code-box" (click)="copyCode()">
+        <span class="code">{{ myCode }}</span>
+        <span class="copy-hint">📋 Kopieren</span>
+      </div>
+      <p class="success" *ngIf="friendSuccess && !selectedFriend">{{ friendSuccess }}</p>
+    </div>
+
+    <!-- Freund hinzufügen -->
+    <div class="add-friend">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Freundes-Code eingeben</mat-label>
+        <input matInput [(ngModel)]="friendCode" placeholder="z.B. AB3C9F2E" />
+      </mat-form-field>
+      <p class="error" *ngIf="friendError">{{ friendError }}</p>
+      <button mat-flat-button color="primary" (click)="addFriend()">Hinzufügen</button>
+    </div>
+
+    <!-- Freundesliste -->
+    <div class="friends-list" *ngIf="friends.length > 0">
+      <p class="section-label">Meine Freunde</p>
+      <button class="friend-chip"
+              *ngFor="let f of friends"
+              (click)="showFriendLifts(f)"
+              [class.active]="selectedFriend?.id === f.id">
+        {{ f.followedName }}
+      </button>
+    </div>
+
+    <!-- Kraft-Vergleich -->
+    <div class="comparison" *ngIf="selectedFriend">
+      <p class="section-label">🏆 Bestleistungen von {{ selectedFriend.followedName }}</p>
+      <p *ngIf="loadingLifts" class="loading">Wird geladen...</p>
+      <div class="lift-row" *ngFor="let lift of friendLifts">
+        <span class="lift-name">{{ lift.exerciseName }}</span>
+        <span class="lift-weight">{{ lift.weight }} kg</span>
+      </div>
+      <p *ngIf="!loadingLifts && friendLifts.length === 0" class="empty">Noch keine Daten.</p>
+    </div>
+  </ng-container>
 
 </div>

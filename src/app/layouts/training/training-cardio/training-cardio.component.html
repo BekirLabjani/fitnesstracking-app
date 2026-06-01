@@ -1,1 +1,23 @@
-<p>training-cardio works!</p>
+<div class="cardio-page">
+  <div class="exercise-select">
+    <label>Übung auswählen</label>
+    <select [(ngModel)]="selectedExerciseId">
+      <option *ngFor="let ex of exercises" [value]="ex.id">{{ ex.name }}</option>
+    </select>
+  </div>
+
+  <div *ngIf="selectedExercise">
+    <h2>{{ selectedExercise.name }}</h2>
+  </div>
+
+  <app-time-header [selectedPeriod]="selectedPeriod" (tabChange)="onPeriodChange($event)">
+  </app-time-header>
+
+  <div *ngIf="trainings.length === 0" class="empty-state">
+    <p>Noch kein Cardio eingetragen. Drücke + um ein Training hinzuzufügen.</p>
+  </div>
+
+  <div style="height: 250px" *ngIf="trainings.length > 0">
+    <canvas baseChart [type]="'bar'" [data]="chartData"></canvas>
+  </div>
+</div>

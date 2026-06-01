@@ -1,42 +1,117 @@
-
 <div class="app-layout">
-<app-header (toggleProfile)="toggleProfileSheet()"></app-header>
+  <app-header (toggleProfile)="toggleProfileSheet()"></app-header>
 
-  <main class="app-content">
-    <section>
-      <section>
-    <mat-card appearance="outlined">
-  <mat-card-header>
-  <div class="training-card">
-  <div class="card-header">
-    <div class="exercise">
-      Bankdrücken
-    </div>
-    <div class="date" id="data">
-      Heute
-    </div>
-  </div>
+  <main class="app-content"
+        (touchstart)="onMainTouchStart($event)"
+        (touchmove)="onMainTouchMove($event)"
+        (touchend)="onMainTouchEnd()">
 
-  <div class="card-body">
-    <div class="stats">
-      <span class="weight">42 kg</span>
-      <span class="divider">×</span>
-      <span>10</span>
-      <span class="divider">×</span>
-      <span>3 Sätze</span>
+    <!-- Pull to Refresh Indicator -->
+    <div class="pull-indicator" [style.opacity]="pullProgress" [style.transform]="'scaleX(' + pullProgress + ')'">
+      <div class="pull-bar"></div>
+    </div>
+    <div class="refreshing-spinner" *ngIf="refreshing">
+      <span class="spin">↻</span> Aktualisiere...
     </div>
 
-    <div class="progress up">
-      ↑ +2 kg Steigerung
+    <!-- Streak Banner -->
+    <div class="streak-banner" *ngIf="!loading && streak > 0">
+      <span class="streak-fire">🔥</span>
+      <span class="streak-text">{{ streak }} {{ streak === 1 ? 'Tag' : 'Tage' }} in Folge</span>
+      <span class="streak-sub">Weiter so!</span>
     </div>
-  </div>
-</div>
-  </mat-card-header>
-</mat-card>
-</section>
-    </section>
+
+    <!-- Skeleton Loader -->
+    <app-skeleton *ngIf="loading" [count]="3"></app-skeleton>
+
+    <!-- Leer-Zustand -->
+    <div class="empty-state" *ngIf="!loading && todayCards.length === 0">
+      <p class="empty-icon">🏋️</p>
+      <p class="empty-text">Noch kein Training heute.</p>
+      <p class="empty-sub">Drücke + um ein Training hinzuzufügen.</p>
+    </div>
+
+    <!-- Heutige Trainings -->
+    <div class="cards-list" *ngIf="!loading">
+      <div class="card-wrapper" *ngFor="let card of todayCards"
+           (touchstart)="onTouchStart($event, card)"
+           (touchmove)="onTouchMove($event, card)"
+           (touchend)="onTouchEnd(card)">
+
+        <!-- Delete Button (hinter Karte) -->
+        <button class="delete-btn" (click)="deleteCard(card)">🗑️</button>
+
+        <!-- Training Karte -->
+        <div class="training-card" [style.transform]="'translateX(' + card.swipeX + 'px)'"
+             (click)="card.swipeX !== 0 ? resetSwipe(card) : null">
+
+          <!-- Kraft -->
+          <ng-container *ngIf="card.entry.type === 'strength'">
+            <div class="card-header">
+              <span class="exercise">{{ card.exerciseName }}</span>
+              <span class="date">Heute</span>
+            </div>
+            <div class="card-body">
+              <div class="stats">
+                <span class="weight">{{ card.entry.weight }} kg</span>
+                <span class="divider">×</span>
+                <span>{{ card.entry.reps }}</span>
+                <span class="divider">×</span>
+                <span>{{ card.entry.sets }} Sätze</span>
+              </div>
+              <div *ngIf="card.improvement !== null" class="progress"
+                   [class.up]="card.improvement > 0" [class.down]="card.improvement < 0" [class.neutral]="card.improvement === 0">
+                <span *ngIf="card.improvement > 0">↑ +{{ card.improvement }} kg Steigerung</span>
+                <span *ngIf="card.improvement < 0">↓ {{ card.improvement }} kg</span>
+                <span *ngIf="card.improvement === 0">→ Gleiches Gewicht</span>
+              </div>
+              <p class="card-note" *ngIf="card.entry.notes">📝 {{ card.entry.notes }}</p>
+            </div>
+          </ng-container>
+
+          <!-- Cardio -->
+          <ng-container *ngIf="card.entry.type === 'cardio'">
+            <div class="card-header">
+              <span class="exercise">{{ card.exerciseName }}</span>
+              <span class="date">Heute</span>
+            </div>
+            <div class="card-body">
+              <div class="stats"><span class="weight">{{ getCardioText(card.entry) }}</span></div>
+              <p class="card-note" *ngIf="card.entry.notes">📝 {{ card.entry.notes }}</p>
+            </div>
+          </ng-container>
+
+          <!-- Körpergewicht -->
+          <ng-container *ngIf="card.entry.type === 'body'">
+            <div class="card-header">
+              <span class="exercise">{{ card.exerciseName }}</span>
+              <span class="date">Heute</span>
+            </div>
+            <div class="card-body">
+              <div class="stats"><span class="weight">{{ card.entry.bodyWeight }} kg</span></div>
+              <p class="card-note" *ngIf="card.entry.notes">📝 {{ card.entry.notes }}</p>
+            </div>
+          </ng-container>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Top PRs -->
+    <div class="pr-section" *ngIf="!loading && topPRs.length > 0">
+      <h3 class="pr-title">🏆 Deine Top Bestleistungen</h3>
+      <div class="pr-chips">
+        <div class="pr-chip" *ngFor="let pr of topPRs">
+          <span class="pr-ex">{{ pr.exerciseName }}</span>
+          <span class="pr-kg">{{ pr.weight }} kg</span>
+        </div>
+      </div>
+    </div>
+
   </main>
 
+  <app-rest-timer></app-rest-timer>
   <app-nav-bottom></app-nav-bottom>
 </div>
+
 <app-profile [open]="isSheetOpen" (close)="isSheetOpen = false"></app-profile>

@@ -9,95 +9,110 @@ header {
   top: 7px;
   background-color: #131533;
   user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
+  z-index: 100;
 }
 
-.menu-btn{
+.menu-btn {
   background-color: transparent;
   border: none;
-  font-size: 30px;
   width: 40px;
   height: 40px;
   display: flex;
   align-items: center;
-}
-//-----------------User-icon---------------------
-// .profile-avatar {
-//   width: 36px;
-//   height: 36px;
-//   border-radius: 50%;
-//   border: none;
-//   background-color: #ffffff;
-//   color: #1e3a8a;
-//   font-size: 16px;
-//   font-weight: 600;
-
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-
-//   cursor: pointer;
-
-//   outline: none;
-//   -webkit-tap-highlight-color: transparent; // 🔴 entfernt Mobile-Grau
-
-//   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-//   transition: transform 0.15s ease, box-shadow 0.15s ease;
-
-//   &:hover {
-//     transform: scale(1.05);
-//     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.16);
-//   }
-
-//   &:active {
-//     transform: scale(0.95);
-//   }
-
-//   /* 🔵 Nur Tastatur-Fokus */
-//   &:focus-visible {
-//     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5),
-//       0 4px 12px rgba(0, 0, 0, 0.12);
-//   }
-// }
-
-.dropdown-menu {
-  position: absolute;
-  top: 180%;
-  right: -27px;
-  margin-top: -3px;
-  margin-top: -3px;
-  background-color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  min-width: 150px;
-  z-index: 1000;
-  opacity: 0;
-  transform: translateY(-20px);
-  pointer-events: none;
-  transition: all 0.3s ease-in-out;
-}
-
-.dropdown-menu.menu-open {
-  opacity: 1; /* Sichtbar */
-  transform: translateY(0); /* Zurück auf Originalposition */
-  pointer-events: auto;
-}
-.dropdown-menu ul {
-  list-style: none;
-  padding: 10px 0;
-  margin: 0;
-}
-
-.dropdown-menu li {
-  padding: 10px 20px;
   cursor: pointer;
-  color: #333;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.dropdown-menu li:hover {
-  background-color: #f0f0f0; /* Grauer Hover-Effekt wie in Apps üblich */
+/* ── Backdrop ── */
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 200;
 }
-.profile-menu-container {
-  position: relative; // 🎯 Anker
+
+/* ── Drawer ── */
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 260px;
+  background: #0f172a;
+  z-index: 300;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.5);
+
+  &.open {
+    transform: translateX(0);
+  }
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.drawer-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.drawer-close {
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+
+  &:hover { background: rgba(255, 255, 255, 0.16); }
+}
+
+/* ── Links ── */
+.drawer-links {
+  list-style: none;
+  padding: 12px 0;
+  margin: 0;
+
+  li a {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 20px;
+    color: #d1d5db;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    transition: background 0.15s, color 0.15s;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+    }
+
+    &.active {
+      color: #5bbcff;
+      background: rgba(91, 188, 255, 0.08);
+    }
+  }
+}
+
+.nav-icon {
+  font-size: 20px;
+  width: 28px;
+  text-align: center;
 }

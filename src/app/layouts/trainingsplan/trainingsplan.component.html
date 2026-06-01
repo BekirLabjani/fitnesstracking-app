@@ -1,0 +1,52 @@
+<div class="plan-page">
+
+  <div class="plan-header">
+    <a routerLink="/dashboard" class="back-btn">←</a>
+    <h1>Trainingsplan</h1>
+  </div>
+
+  <!-- Wochentage -->
+  <div class="day-tabs">
+    <button
+      *ngFor="let day of days; let i = index"
+      class="day-tab"
+      [class.active]="activeDay === i"
+      (click)="activeDay = i">
+      {{ day.slice(0, 2) }}
+    </button>
+  </div>
+
+  <div class="day-title">{{ days[activeDay] }}</div>
+
+  <!-- Übung hinzufügen -->
+  <div class="add-section">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Übung hinzufügen</mat-label>
+      <mat-select [(value)]="selectedExercise">
+        <mat-optgroup *ngFor="let group of groupedExercises" [label]="group[0]">
+          <mat-option *ngFor="let ex of group[1]" [value]="ex.id">{{ ex.name }}</mat-option>
+        </mat-optgroup>
+      </mat-select>
+    </mat-form-field>
+    <button mat-flat-button color="primary" (click)="addExercise()" [disabled]="!selectedExercise">
+      + Hinzufügen
+    </button>
+  </div>
+
+  <!-- Übungsliste -->
+  <div class="exercises-list" *ngIf="activePlan.length > 0">
+    <div class="exercise-item" *ngFor="let ex of activePlan">
+      <div class="ex-info">
+        <span class="ex-name">{{ getExerciseName(ex) }}</span>
+        <span class="ex-category">{{ getExerciseCategory(ex) }}</span>
+      </div>
+      <button class="remove-btn" (click)="removeExercise(ex)">✕</button>
+    </div>
+  </div>
+
+  <div class="empty-day" *ngIf="activePlan.length === 0">
+    <p>🏖️ Ruhetag oder noch leer.</p>
+    <p class="sub">Füge Übungen für {{ days[activeDay] }} hinzu.</p>
+  </div>
+
+</div>

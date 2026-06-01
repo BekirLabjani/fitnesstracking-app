@@ -1,1 +1,59 @@
-<p>signup works!</p>
+<div class="auth-container">
+  <div class="auth-card">
+
+    @if (loading) {
+      <div class="loading-overlay">
+        <mat-spinner diameter="48"></mat-spinner>
+      </div>
+    }
+
+    <h1 class="auth-title">Konto erstellen</h1>
+    <p class="auth-subtitle">Starte jetzt deinen Fitness-Tracker</p>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-form">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>E-Mail</mat-label>
+        <input matInput type="email" formControlName="email" placeholder="deine@email.de" />
+        <mat-icon matSuffix>email</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Passwort</mat-label>
+        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" />
+        <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Passwort bestätigen</mat-label>
+        <input matInput [type]="hideConfirm ? 'password' : 'text'" formControlName="confirmPassword" />
+        <button mat-icon-button matSuffix type="button" (click)="hideConfirm = !hideConfirm">
+          <mat-icon>{{ hideConfirm ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      @if (errorMessage) {
+        <p class="error-message">{{ errorMessage }}</p>
+      }
+
+      <button mat-flat-button color="primary" type="submit" class="full-width submit-btn" [disabled]="loading">
+        Registrieren
+      </button>
+    </form>
+
+    <mat-divider class="divider">
+      <span class="divider-text">oder</span>
+    </mat-divider>
+
+    <button mat-stroked-button class="full-width google-btn" type="button" (click)="onGoogleLogin()" [disabled]="loading">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="google-icon" />
+      Mit Google registrieren
+    </button>
+
+    <p class="auth-footer">
+      Bereits ein Konto?
+      <a routerLink="/login">Anmelden</a>
+    </p>
+  </div>
+</div>

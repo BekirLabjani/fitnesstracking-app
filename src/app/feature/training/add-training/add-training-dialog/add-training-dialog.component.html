@@ -1,70 +1,100 @@
 <div class="add-section">
-  <div class="header-dialog">
-    <h3>Add Training</h3>
 
-    <button
-      class="close-btn"
-      type="button"
-      (click)="openDialog()"
-      aria-label="Close dialog"
-    >
-      ✕
-    </button>
+  <!-- Header -->
+  <div class="header-dialog">
+    <h3>Training hinzufügen</h3>
+    <button class="close-btn" type="button" (click)="close()">✕</button>
+  </div>
+
+  <!-- Typ-Auswahl -->
+  <div class="type-selector">
+    <button [class.active]="activeType === 'strength'" (click)="setType('strength')">💪 Kraft</button>
+    <button [class.active]="activeType === 'cardio'" (click)="setType('cardio')">🏃 Cardio</button>
+    <button [class.active]="activeType === 'body'" (click)="setType('body')">⚖️ Gewicht</button>
   </div>
 
   <div class="content">
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Trainingseinheit</mat-label>
 
-      <mat-select [(value)]="selectedExerciseId">
-        <mat-option *ngFor="let ex of exerciseOptions" [value]="ex.id">
-          {{ ex.label }}
-        </mat-option>
-      </mat-select>
+    <!-- KRAFT -->
+    <ng-container *ngIf="activeType === 'strength'">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Übung</mat-label>
+        <mat-select [(value)]="selectedStrengthExercise">
+          <mat-option *ngFor="let ex of strengthExercises" [value]="ex.id">
+            {{ ex.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="row-fields">
+        <mat-form-field appearance="outline">
+          <mat-label>KG</mat-label>
+          <input matInput type="number" [(ngModel)]="kg" min="0" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>WDH</mat-label>
+          <input matInput type="number" [(ngModel)]="wdh" min="0" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Sätze</mat-label>
+          <input matInput type="number" [(ngModel)]="saetze" min="0" />
+        </mat-form-field>
+      </div>
+    </ng-container>
+
+    <!-- CARDIO -->
+    <ng-container *ngIf="activeType === 'cardio'">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Übung</mat-label>
+        <mat-select [(value)]="selectedCardioExercise">
+          <mat-option *ngFor="let ex of cardioExercises" [value]="ex.id">
+            {{ ex.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="row-fields">
+        <mat-form-field appearance="outline">
+          <mat-label>Dauer (min)</mat-label>
+          <input matInput type="number" [(ngModel)]="dauer" min="0" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Distanz (km)</mat-label>
+          <input matInput type="number" [(ngModel)]="distanz" min="0" />
+        </mat-form-field>
+      </div>
+
+      <!-- Pace Anzeige -->
+      <div class="pace-display" *ngIf="dauer > 0 && distanz > 0">
+        <span class="pace-label">⚡ Tempo</span>
+        <span class="pace-value">{{ pace }} min/km</span>
+      </div>
+    </ng-container>
+
+    <!-- GEWICHT -->
+    <ng-container *ngIf="activeType === 'body'">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Körpergewicht (kg)</mat-label>
+        <input matInput type="number" [(ngModel)]="koerpergewicht" min="0" />
+      </mat-form-field>
+    </ng-container>
+
+    <!-- Notizen -->
+    <mat-form-field appearance="outline" class="full-width notes-field">
+      <mat-label>📝 Notiz (optional)</mat-label>
+      <textarea matInput [(ngModel)]="notes" rows="2" placeholder="z.B. Neues PR, war müde..."></textarea>
     </mat-form-field>
+
+    <!-- Fehler -->
+    <p class="error" *ngIf="error">{{ error }}</p>
   </div>
-  <div class="wight">
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>KG</mat-label>
-      <input matInput placeholder="z. B. KG" />
-    </mat-form-field>
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>WDH</mat-label>
-      <input matInput placeholder="z. B. Wiederholung" />
-    </mat-form-field>
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Sätze</mat-label>
-      <input matInput placeholder="z. B. Sätze" />
-    </mat-form-field>
-  </div>
+
+  <!-- Speichern -->
   <div class="add-new-unit">
-    <button
-      class="add-new-unit-btn"
-      type="button"
-      (click)="addNewUnit()"
-      aria-label=""
-    >
-      <svg
-        width="32"
-        height="32"
-        viewBox="0 0 64 64"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <circle cx="32" cy="32" r="32" fill="transparent" />
-        <path
-          d="M32 18V46"
-          stroke="white"
-          stroke-width="4"
-          stroke-linecap="round"
-        />
-        <path
-          d="M18 32H46"
-          stroke="white"
-          stroke-width="4"
-          stroke-linecap="round"
-        />
-      </svg>
-      <span>Add</span>
+    <button class="save-btn" type="button" (click)="save()" [disabled]="saving">
+      <mat-spinner *ngIf="saving" diameter="20"></mat-spinner>
+      <span *ngIf="!saving">💾 Speichern</span>
     </button>
   </div>
+
 </div>

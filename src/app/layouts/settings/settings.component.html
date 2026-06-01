@@ -1,1 +1,40 @@
-<p>settings works!</p>
+<div class="settings-page">
+  <div class="settings-header">
+    <button class="back-btn" routerLink="/dashboard">← Zurück</button>
+    <h1>Einstellungen</h1>
+  </div>
+
+  <div class="settings-list">
+
+    <!-- Dark/Light Mode Toggle -->
+    <div class="settings-item" (click)="theme.toggle()">
+      <span class="settings-icon">{{ theme.isDark ? '🌙' : '☀️' }}</span>
+      <span>{{ theme.isDark ? 'Dark Mode' : 'Light Mode' }}</span>
+      <div class="toggle" [class.on]="theme.isDark">
+        <div class="toggle-thumb"></div>
+      </div>
+    </div>
+
+    <div class="settings-item">
+      <span class="settings-icon">🔔</span>
+      <span>Benachrichtigungen</span>
+      <span class="badge soon">Bald</span>
+    </div>
+
+    <div class="settings-item" routerLink="/trainingsplan">
+      <span class="settings-icon">📋</span>
+      <span>Trainingsplan</span>
+      <span class="badge go">→</span>
+    </div>
+
+    <div class="settings-item">
+      <span class="settings-icon">🌍</span>
+      <span>Sprache: Deutsch</span>
+    </div>
+
+    <div class="settings-item">
+      <span class="settings-icon">📱</span>
+      <span>Version 0.03</span>
+    </div>
+  </div>
+</div>

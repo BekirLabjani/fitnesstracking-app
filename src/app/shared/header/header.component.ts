@@ -1,33 +1,41 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input ,Output, EventEmitter } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { USERS, UserProfile } from '../../data/users.data';
+import { Component, Output, EventEmitter, OnInit, OnDestroy, inject } from '@angular/core';
+import { Auth } from '@angular/fire/auth';
+import { getFirestore, doc, onSnapshot } from 'firebase/firestore';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent {
-  constructor(private router: Router) {}
- isMenuOpen = false;
-  // wenn es Close Sein soll
-@Output() toggleProfile = new EventEmitter<void>();
-  user: UserProfile = USERS['uid_bekir_001'];
+export class HeaderComponent implements OnInit, OnDestroy {
+  private fireAuth = inject(Auth);
+  private db = getFirestore();
+  private unsub?: () => void;
 
-openSheet() {
-  this.toggleProfile.emit();
-  
-}
- getInitiales(name: string) {
-    if (!name) return '';
+  @Output() toggleProfile = new EventEmitter<void>();
 
-    const init = name.trim().split(' '); // macht aus " Bekir Labjani " => ["Bekir" , "Labjani"]
-    if (init.length === 1) {
-      return init[0].charAt(0).toUpperCase();
+  today = new Date().toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' });
+  displayName = '';
+  photoBase64 = '';
+
+  ngOnInit() {
+    const u = this.fireAuth.currentUser;
+    this.displayName = u?.displayName ?? 'User';
+    if (u) {
+      this.unsub = onSnapshot(doc(this.db, 'userProfiles', u.uid), snap => {
+        this.photoBase64 = snap.data()?.['photoBase64'] ?? '';
+      });
     }
-    return (init[0].charAt(0) + init[1].charAt(0)).toUpperCase();
+  }
+
+  ngOnDestroy() { this.unsub?.(); }
+
+  openSheet() { this.toggleProfile.emit(); }
+
+  get initials(): string {
+    return this.displayName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
   }
 }

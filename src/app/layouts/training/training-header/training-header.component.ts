@@ -1,27 +1,26 @@
 import { Component, Output, EventEmitter } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-training-header',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, RouterLink, RouterLinkActive],
   templateUrl: './training-header.component.html',
-  styleUrl: './training-header.component.scss'
+  styleUrl: './training-header.component.scss',
 })
 export class TrainingHeaderComponent {
-    // wenn es Close Sein soll 
-    isMenuOpen = false;
-    @Output() menuToggle = new EventEmitter<boolean>(); // ich sende den status des IsMenuOpen ( True/ False) 
+  @Output() menuToggle = new EventEmitter<boolean>();
 
-  toggleMenu () {
-      this.isMenuOpen = !this.isMenuOpen;
-          this.menuToggle.emit(this.isMenuOpen);
-      console.log(this.isMenuOpen);
-      
+  isDrawerOpen = false;
+
+  toggleDrawer() {
+    this.isDrawerOpen = !this.isDrawerOpen;
+    this.menuToggle.emit(this.isDrawerOpen);
   }
 
-  openSettings(){
-    this.isMenuOpen = false;
-              this.menuToggle.emit(this.isMenuOpen);
-
+  closeDrawer() {
+    this.isDrawerOpen = false;
+    this.menuToggle.emit(false);
   }
 }

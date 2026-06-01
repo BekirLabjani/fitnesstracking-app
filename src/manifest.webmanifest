@@ -1,0 +1,24 @@
+{
+  "name": "FitnessTracker",
+  "short_name": "FitnessTracker",
+  "description": "Tracke dein Training, verfolge Fortschritte und vergleiche dich mit Freunden.",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#0b0f2a",
+  "theme_color": "#2f68bf",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "assets/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,107 +1,96 @@
-/* You can add global styles to this file, and also import other style files */
-*{
-    margin: 0;
-    padding: 0;
+/* ── Design System ─────────────────────────────────────── */
+:root {
+  --bg-base:       #06091A;
+  --bg-surface:    #0D1628;
+  --bg-card:       #111E35;
+  --bg-elevated:   #172440;
+  --bg-hover:      #1C2D50;
+
+  --accent:        #3B82F6;
+  --accent-light:  #60A5FA;
+  --accent-dim:    rgba(59,130,246,0.15);
+  --cyan:          #22D3EE;
+  --cyan-dim:      rgba(34,211,238,0.12);
+  --green:         #10B981;
+  --green-dim:     rgba(16,185,129,0.12);
+  --orange:        #F59E0B;
+  --orange-dim:    rgba(245,158,11,0.12);
+  --red:           #F43F5E;
+  --red-dim:       rgba(244,63,94,0.12);
+  --purple:        #8B5CF6;
+
+  --text-1:        #F1F5F9;
+  --text-2:        #94A3B8;
+  --text-3:        #475569;
+  --text-4:        #1E293B;
+
+  --border:        rgba(255,255,255,0.07);
+  --border-accent: rgba(59,130,246,0.25);
+
+  --radius-s:  8px;
+  --radius-m:  14px;
+  --radius-l:  20px;
+  --radius-xl: 28px;
+
+  --shadow-s:  0 2px 12px rgba(0,0,0,0.3);
+  --shadow-m:  0 4px 24px rgba(0,0,0,0.4);
+  --shadow-l:  0 8px 40px rgba(0,0,0,0.5);
+  --shadow-xl: 0 16px 60px rgba(0,0,0,0.6);
+
+  --transition: 0.2s cubic-bezier(0.4,0,0.2,1);
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* ── Reset ──────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
   height: 100%;
-  margin: 0;
+  font-family: 'Inter', 'Roboto', system-ui, sans-serif;
+  background: var(--bg-base);
+  color: var(--text-1);
+  -webkit-font-smoothing: antialiased;
 }
 
+/* ── App Layout ─────────────────────────────────────────── */
 .app-layout {
-  height: 100dvh;
   display: flex;
   flex-direction: column;
-}
-
-app-header,
-app-nav-bottom {
-  height: 90px;
-  flex-shrink: 0;
+  min-height: 100dvh;
+  background: var(--bg-base);
 }
 
 .app-content {
   flex: 1;
-  overflow: hidden; // kein Scroll
-  background-color: rgba(165, 163, 163, 0.53);
-
-  display: flex;
-  justify-content: center;
+  overflow-y: auto;
+  padding: 16px 16px 100px;
 }
 
+/* ── Light Mode ─────────────────────────────────────────── */
+body.light-mode {
+  --bg-base:     #F0F4FF;
+  --bg-surface:  #E8EEF8;
+  --bg-card:     #FFFFFF;
+  --bg-elevated: #F8FAFF;
+  --text-1:      #0F172A;
+  --text-2:      #475569;
+  --text-3:      #94A3B8;
+  --border:      rgba(0,0,0,0.08);
+  background: var(--bg-base) !important;
 
-/* inter-100 - latin */
-@font-face {
-  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 100;
-  src: url('/assats/fonts/inter-v20-latin-100.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  .strength-page, .cardio-page, .body-page,
+  .stats-page, .plan-page, .settings-page {
+    background: linear-gradient(180deg, var(--bg-surface), var(--bg-base)) !important;
+    color: var(--text-1) !important;
+  }
+  .exercise-select { background: var(--bg-card) !important; }
+  .exercise-select select { background: var(--bg-elevated) !important; color: var(--text-1) !important; }
+  .training-card { background: var(--bg-card) !important; }
 }
-/* inter-200 - latin */
-@font-face {
-  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 200;
-  src: url('/assats/fonts/inter-v20-latin-200.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
-}
-/* inter-300 - latin */
-@font-face {
-  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 300;
-  src: url('/assats/fonts/inter-v20-latin-300.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
-}
-/* inter-regular - latin */
-@font-face {
-  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 400;
-  src: url('/assats/fonts/inter-v20-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
-}
-/* inter-500 - latin */
-@font-face {
-  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 500;
-  src: url('/assats/fonts/inter-v20-latin-500.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
-}
-/* inter-600 - latin */
-@font-face {
-  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 600;
-  src: url('/assats/fonts/inter-v20-latin-600.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
-}
-/* inter-700 - latin */
-@font-face {
-  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 700;
-  src: url('/assats/fonts/inter-v20-latin-700.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
-}
-/* inter-800 - latin */
-@font-face {
-  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 800;
-  src: url('/assats/fonts/inter-v20-latin-800.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
-}
-/* inter-900 - latin */
-@font-face {
-  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 900;
-  src: url('/assats/fonts/inter-v20-latin-900.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
-}
+
+/* ── Scrollbar ──────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+/* Inter font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');

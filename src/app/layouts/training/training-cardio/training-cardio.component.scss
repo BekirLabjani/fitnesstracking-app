@@ -1,3 +1,63 @@
-p{
-   padding-top: 200px;
+.cardio-page {
+  padding: 16px 16px 140px;
+  background: var(--bg-base);
+  min-height: calc(100dvh - 148px);
+  color: var(--text-1);
 }
+
+.exercise-select {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  padding: 16px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-m);
+
+  label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  select {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: var(--radius-s);
+    background: var(--bg-elevated);
+    color: var(--text-1);
+    border: 1px solid var(--border);
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &:hover  { border-color: rgba(34,211,238,0.4); }
+    &:focus  { border-color: var(--cyan); box-shadow: 0 0 0 3px var(--cyan-dim); }
+    option   { background: var(--bg-elevated); color: var(--text-1); }
+  }
+}
+
+h2 {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-1);
+  letter-spacing: -0.5px;
+  margin-bottom: 4px;
+}
+
+.empty-state p {
+  font-size: 14px;
+  color: var(--text-3);
+  text-align: center;
+  margin-top: 48px;
+}
+
+canvas { width: 100% !important; }
