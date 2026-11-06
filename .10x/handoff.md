@@ -1,11 +1,18 @@
 # Current Handoff
 
-**From:** Discovery (all roles)
-**To:** User decision
+**From:** Senior Engineer (session 3 code review)
+**To:** User / next session
 
-Full-codebase review completed on request ("schau dir die App an und sag mir wo man was verbessern könnte"). No implementation was requested yet — findings presented in chat, organized by role lens (Security, Architecture/Data, DevOps, QA). Awaiting user's pick of what to actually fix; each fix should go through a mini-brainstorm before code changes per the HARD-GATE, scaled to task size (most of these are small-fix size).
+Fixed everything found in this pass (see `.10x/decisions/senior-engineer/_index.md`): a second missing-Firestore-rule bug (`trainingPlans`, same class as the earlier Friends bug), a leftover `getFirestore()` call, a debug `console.log`, a toast-id collision bug, and a missing spec file. Build + all 26 tests verified green. Not pushed to remote.
 
-Highest-priority item: `friends` and `userProfiles` Firestore collections are used by `FriendsService` but have no matching rule in `firestore.rules` — the catch-all `allow read, write: if false` blocks them, so the friends feature is almost certainly broken/silently failing in production.
+Still open from earlier sessions:
+- CSP is live in `firebase.json` as `Content-Security-Policy-Report-Only` — needs a real deploy + live login/sync/avatar-upload test, then switch to enforcing (drop `-Report-Only` from the header key) once the browser console shows no violations.
+- `npm audit` still has ~70 vulnerabilities, all requiring a major breaking `@angular-devkit/build-angular` upgrade, deliberately not forced.
+- Not-yet-reviewed files listed at the bottom of `.10x/decisions/senior-engineer/_index.md`.
 
 ## History
-(none yet — first handoff)
+
+### Discovery (all roles), 2026-11-06
+Full-codebase review completed on request ("schau dir die App an und sag mir wo man was verbessern könnte"). No implementation was requested yet — findings presented in chat, organized by role lens (Security, Architecture/Data, DevOps, QA).
+
+Highest-priority item found: `friends` and `userProfiles` Firestore collections are used by `FriendsService` but have no matching rule in `firestore.rules` — the catch-all `allow read, write: if false` blocks them. (Fixed in the next session.)

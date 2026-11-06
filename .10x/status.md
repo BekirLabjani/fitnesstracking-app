@@ -20,6 +20,7 @@
 - [x] Avatars migrated to Firebase Storage (was base64-in-Firestore)
 - [x] Invite code hardened (random + uniqueness-checked, was UID prefix)
 - [x] `storage.rules` added (Storage had none before)
+- [x] Senior-engineer pass (session 3): fixed another missing Firestore rule (`trainingPlans` — same bug class as Friends, caught by a project-wide collection grep this time), DI consistency in `trainingsplan.component.ts`, removed debug `console.log`, fixed toast id collision, added missing `trainingsplan` spec
 
 ## Notes
 `node_modules` had never been installed in this project before this session, and the test suite had apparently never been run — all 25 specs were untouched Angular CLI scaffolds, 17 of them actually broken.
