@@ -16,7 +16,10 @@
 - [x] Add hosting security headers (Referrer-Policy, HSTS)
 - [x] Verify production build (`ng build --configuration production`) succeeds
 - [x] Verify full unit test suite passes (`ng test`, ChromeHeadless)
-- [ ] Not done (deliberately, flagged as follow-ups): CSP header (needs live Google-login verification), avatar migration to Firebase Storage, invite-code collision hardening
+- [x] CSP added (report-only — needs live-login verification before enforcing)
+- [x] Avatars migrated to Firebase Storage (was base64-in-Firestore)
+- [x] Invite code hardened (random + uniqueness-checked, was UID prefix)
+- [x] `storage.rules` added (Storage had none before)
 
 ## Notes
 `node_modules` had never been installed in this project before this session, and the test suite had apparently never been run — all 25 specs were untouched Angular CLI scaffolds, 17 of them actually broken.
