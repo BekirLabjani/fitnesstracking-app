@@ -41,6 +41,38 @@ blocks. One command: `grep -rohE "(collection|doc)\(this\.db,\s*'[a-zA-Z]+'" src
 Same logic applies to `storage.rules` if more Storage paths get added
 later.
 
+## fitness-tracker-hardening — free-tier features (session 4)
+
+User asked which of the brainstormed features are "not premium" and
+picked two to build: progression suggestions and custom exercises.
+
+- **Progression suggestions**: `add-training-dialog.component.ts` now
+  fetches the last logged entry for the selected strength exercise
+  (reusing `TrainingService.getStrengthTrainings()`, no new backend) and
+  shows a "last time: Xkg × Y × Z" hint with a one-tap +2.5kg apply
+  button.
+- **Custom exercises**: new `customExercises` Firestore collection +
+  `CustomExerciseService`. Wired into every exercise list in the app
+  (add dialog, strength/cardio stats pickers, dashboard name resolution,
+  trainingsplan), not just the creation point — a half-wired feature
+  where a custom exercise works in one screen and shows a raw Firestore
+  id in another would be worse than not building it.
+- Added `resolveExerciseName(id, customExercises)` to
+  `exercise.data.ts` as the single shared lookup (static EXERCISES
+  first, custom-exercise fallback second) instead of duplicating that
+  fallback per file.
+- `exerciseId` typing moved from the closed `ExerciseId` union to plain
+  `string` in every touched UI component — matches what
+  `TrainingEntry.exerciseId` in `training.service.ts` was already typed
+  as; a custom exercise's id is Firestore-generated, not a static-object
+  key.
+- **Known gap, not fixed**: `friends.service.ts`'s
+  `getFriendBestLifts()` only resolves names via `EXERCISES`, so a
+  friend's custom exercise shows its raw id instead of a name. Fixing
+  this needs the Firestore rules to let a follower read the followed
+  user's `customExercises`, which is a real permission-model decision,
+  not a drive-by fix — flagged for a future session.
+
 ## Not reviewed yet this pass (candidates for next time)
 - `training-cardio`, `training-stats`, `time-header`, `rest-timer`,
   `skeleton`, `training-nav-bar`, `training-header` components — read

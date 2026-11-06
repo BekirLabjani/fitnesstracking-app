@@ -21,6 +21,7 @@
 - [x] Invite code hardened (random + uniqueness-checked, was UID prefix)
 - [x] `storage.rules` added (Storage had none before)
 - [x] Senior-engineer pass (session 3): fixed another missing Firestore rule (`trainingPlans` — same bug class as Friends, caught by a project-wide collection grep this time), DI consistency in `trainingsplan.component.ts`, removed debug `console.log`, fixed toast id collision, added missing `trainingsplan` spec
+- [x] Free-tier features (session 4): progression suggestions in add-training dialog; custom exercises (new `customExercises` collection + service, wired into add dialog, strength/cardio pickers, dashboard, trainingsplan). Known gap: friends' custom exercises don't resolve to a name in the friend-comparison view (flagged, not fixed — needs a permission-model decision)
 
 ## Notes
 `node_modules` had never been installed in this project before this session, and the test suite had apparently never been run — all 25 specs were untouched Angular CLI scaffolds, 17 of them actually broken.
