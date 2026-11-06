@@ -19,12 +19,22 @@
     <ng-container *ngIf="activeType === 'strength'">
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Übung</mat-label>
-        <mat-select [(value)]="selectedStrengthExercise">
+        <mat-select [(value)]="selectedStrengthExercise" (selectionChange)="onStrengthExerciseChange()">
           <mat-option *ngFor="let ex of strengthExercises" [value]="ex.id">
             {{ ex.label }}
           </mat-option>
         </mat-select>
       </mat-form-field>
+
+      <!-- Progressions-Vorschlag -->
+      <div class="progress-hint" *ngIf="lastStrengthEntry as last">
+        <span class="progress-label">
+          Letztes Mal: {{ last.weight }}kg × {{ last.reps }} × {{ last.sets }} Sätze
+        </span>
+        <button type="button" class="apply-suggestion-btn" (click)="applySuggestion()" *ngIf="suggestedWeight">
+          → {{ suggestedWeight }}kg übernehmen
+        </button>
+      </div>
 
       <div class="row-fields">
         <mat-form-field appearance="outline">
@@ -39,6 +49,19 @@
           <mat-label>Sätze</mat-label>
           <input matInput type="number" [(ngModel)]="saetze" min="0" />
         </mat-form-field>
+      </div>
+
+      <button type="button" class="add-exercise-toggle" (click)="toggleAddExercise()">
+        {{ showAddExercise ? '✕ Abbrechen' : '+ Eigene Übung' }}
+      </button>
+      <div class="add-exercise-form" *ngIf="showAddExercise">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Name der Übung</mat-label>
+          <input matInput [(ngModel)]="newExerciseName" (keyup.enter)="saveNewExercise()" />
+        </mat-form-field>
+        <button type="button" class="save-exercise-btn" (click)="saveNewExercise()" [disabled]="!newExerciseName.trim()">
+          Hinzufügen
+        </button>
       </div>
     </ng-container>
 
@@ -68,6 +91,19 @@
       <div class="pace-display" *ngIf="dauer > 0 && distanz > 0">
         <span class="pace-label">⚡ Tempo</span>
         <span class="pace-value">{{ pace }} min/km</span>
+      </div>
+
+      <button type="button" class="add-exercise-toggle" (click)="toggleAddExercise()">
+        {{ showAddExercise ? '✕ Abbrechen' : '+ Eigene Übung' }}
+      </button>
+      <div class="add-exercise-form" *ngIf="showAddExercise">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Name der Übung</mat-label>
+          <input matInput [(ngModel)]="newExerciseName" (keyup.enter)="saveNewExercise()" />
+        </mat-form-field>
+        <button type="button" class="save-exercise-btn" (click)="saveNewExercise()" [disabled]="!newExerciseName.trim()">
+          Hinzufügen
+        </button>
       </div>
     </ng-container>
 

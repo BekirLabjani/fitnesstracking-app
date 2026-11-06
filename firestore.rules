@@ -27,6 +27,12 @@ service cloud.firestore {
       allow delete: if request.auth != null && resource.data.followerId == request.auth.uid;
     }
 
+    // Eigene Übungen: nur der Besitzer darf sie lesen/ändern/löschen.
+    match /customExercises/{exerciseId} {
+      allow read, update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+
     // Trainingsplan: ein Dokument pro Nutzer (Dokument-ID = userId).
     match /trainingPlans/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;

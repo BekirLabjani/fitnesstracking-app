@@ -9,13 +9,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { Auth } from '@angular/fire/auth';
 import { Firestore } from '@angular/fire/firestore';
 import { doc, setDoc, onSnapshot } from 'firebase/firestore';
-import { EXERCISES, ExerciseId } from '../../data/exercise.data';
+import { EXERCISES, resolveExerciseName } from '../../data/exercise.data';
+import { CustomExerciseService, CustomExercise } from '../../data/custom-exercise.service';
 import { Subscription } from 'rxjs';
 
 const DAYS = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
 const DAY_KEYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
-interface DayPlan { exercises: ExerciseId[]; }
+interface DayPlan { exercises: string[]; }
 type WeekPlan = Record<string, DayPlan>;
 
 @Component({
@@ -28,25 +29,38 @@ type WeekPlan = Record<string, DayPlan>;
 export class TrainingsplanComponent implements OnInit, OnDestroy {
   private auth = inject(Auth);
   private db = inject(Firestore);
+  private customExerciseService = inject(CustomExerciseService);
   private unsub?: () => void;
+  private customExercisesSub?: Subscription;
 
   days = DAYS;
   dayKeys = DAY_KEYS;
   activeDay = 0;
 
   plan: WeekPlan = {};
-  allExercises = Object.entries(EXERCISES)
-    .filter(([, ex]) => ex.category !== 'Cardio')
-    .map(([id, ex]) => ({ id: id as ExerciseId, name: ex.name, category: ex.category }));
+  customExercises: CustomExercise[] = [];
 
-  selectedExercise: ExerciseId | null = null;
+  private readonly builtInExercises = Object.entries(EXERCISES)
+    .filter(([, ex]) => ex.category !== 'Cardio')
+    .map(([id, ex]) => ({ id: id as string, name: ex.name, category: ex.category as string }));
+
+  get allExercises() {
+    return [
+      ...this.builtInExercises,
+      ...this.customExercises.filter(c => !c.isCardio).map(c => ({ id: c.id, name: c.name, category: c.category })),
+    ];
+  }
+
+  selectedExercise: string | null = null;
   saving = false;
 
   get uid() { return this.auth.currentUser?.uid; }
   get activeDayKey() { return this.dayKeys[this.activeDay]; }
-  get activePlan(): ExerciseId[] { return this.plan[this.activeDayKey]?.exercises ?? []; }
+  get activePlan(): string[] { return this.plan[this.activeDayKey]?.exercises ?? []; }
 
   ngOnInit() {
+    this.customExercisesSub = this.customExerciseService.getMyCustomExercises()
+      .subscribe(list => this.customExercises = list);
     if (!this.uid) return;
     const ref = doc(this.db, 'trainingPlans', this.uid);
     this.unsub = onSnapshot(ref, snap => {
@@ -54,7 +68,10 @@ export class TrainingsplanComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() { this.unsub?.(); }
+  ngOnDestroy() {
+    this.unsub?.();
+    this.customExercisesSub?.unsubscribe();
+  }
 
   async addExercise() {
     if (!this.selectedExercise || !this.uid) return;
@@ -69,7 +86,7 @@ export class TrainingsplanComponent implements OnInit, OnDestroy {
     this.selectedExercise = null;
   }
 
-  async removeExercise(ex: ExerciseId) {
+  async removeExercise(ex: string) {
     if (!this.uid) return;
     const current = this.activePlan.filter(e => e !== ex);
     await setDoc(
@@ -79,11 +96,14 @@ export class TrainingsplanComponent implements OnInit, OnDestroy {
     );
   }
 
-  getExerciseName(id: ExerciseId) { return EXERCISES[id]?.name ?? id; }
-  getExerciseCategory(id: ExerciseId) { return EXERCISES[id]?.category ?? ''; }
+  getExerciseName(id: string) { return resolveExerciseName(id, this.customExercises); }
+  getExerciseCategory(id: string) {
+    if (id in EXERCISES) return EXERCISES[id as keyof typeof EXERCISES].category;
+    return this.customExercises.find(c => c.id === id)?.category ?? '';
+  }
 
   get groupedExercises() {
-    const groups: Record<string, { id: ExerciseId; name: string }[]> = {};
+    const groups: Record<string, { id: string; name: string }[]> = {};
     for (const ex of this.allExercises) {
       if (!groups[ex.category]) groups[ex.category] = [];
       groups[ex.category].push({ id: ex.id, name: ex.name });

@@ -44,3 +44,15 @@ export const EXERCISES = {
 } as const;
 
 export type ExerciseId = keyof typeof EXERCISES;
+
+/**
+ * Resolves a display name for an exerciseId that may be a built-in
+ * EXERCISES key or a user-created custom exercise (Firestore doc id).
+ */
+export function resolveExerciseName(
+  id: string,
+  customExercises: { id: string; name: string }[] = []
+): string {
+  if (id in EXERCISES) return EXERCISES[id as ExerciseId].name;
+  return customExercises.find(c => c.id === id)?.name ?? id;
+}

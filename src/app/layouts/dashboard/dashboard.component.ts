@@ -7,7 +7,8 @@ import { SkeletonComponent } from '../../shared/skeleton/skeleton.component';
 import { RestTimerComponent } from '../../shared/rest-timer/rest-timer.component';
 import { TrainingService, TrainingEntry } from '../training/service/training.service';
 import { ToastService } from '../../shared/toast/toast.service';
-import { EXERCISES } from '../../data/exercise.data';
+import { resolveExerciseName } from '../../data/exercise.data';
+import { CustomExerciseService, CustomExercise } from '../../data/custom-exercise.service';
 import { Subscription } from 'rxjs';
 
 interface DashboardCard {
@@ -30,9 +31,12 @@ interface PR { exerciseName: string; weight: number; }
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   private trainingService = inject(TrainingService);
+  private customExerciseService = inject(CustomExerciseService);
   private toast = inject(ToastService);
   private sub?: Subscription;
+  private customExercisesSub?: Subscription;
   private allTrainings: TrainingEntry[] = [];
+  private customExercises: CustomExercise[] = [];
 
   isSheetOpen = false;
   loading = true;
@@ -53,9 +57,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.allTrainings = all;
       this.buildCards(all);
     });
+    this.customExercisesSub = this.customExerciseService.getMyCustomExercises().subscribe(list => {
+      this.customExercises = list;
+      this.buildCards(this.allTrainings);
+    });
   }
 
-  ngOnDestroy() { this.sub?.unsubscribe(); }
+  ngOnDestroy() {
+    this.sub?.unsubscribe();
+    this.customExercisesSub?.unsubscribe();
+  }
 
   private buildCards(all: TrainingEntry[]) {
     const todayEntries = all.filter(t => t.date === this.today);
@@ -140,9 +151,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   // ── Helpers ─────────────────────────────────────────
   private getExerciseName(entry: TrainingEntry): string {
     if (entry.type === 'body') return 'Körpergewicht';
-    if (entry.exerciseId && EXERCISES[entry.exerciseId as keyof typeof EXERCISES])
-      return EXERCISES[entry.exerciseId as keyof typeof EXERCISES].name;
-    return entry.exerciseId ?? '–';
+    if (!entry.exerciseId) return '–';
+    return resolveExerciseName(entry.exerciseId, this.customExercises);
   }
 
   private calcImprovement(entry: TrainingEntry, all: TrainingEntry[]): number | null {
@@ -178,7 +188,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     all.filter(t => t.type === 'strength' && t.exerciseId && t.weight)
        .forEach(t => { bests[t.exerciseId!] = Math.max(bests[t.exerciseId!] ?? 0, t.weight!); });
     return Object.entries(bests)
-      .map(([id, weight]) => ({ exerciseName: EXERCISES[id as keyof typeof EXERCISES]?.name ?? id, weight }))
+      .map(([id, weight]) => ({ exerciseName: resolveExerciseName(id, this.customExercises), weight }))
       .sort((a, b) => b.weight - a.weight);
   }
 

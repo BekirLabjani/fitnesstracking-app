@@ -3,12 +3,12 @@ import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TimeHeaderComponent } from '../time-header/time-header.component';
 import { BaseChartDirective } from 'ng2-charts';
-import { EXERCISES } from '../../../data/exercise.data';
+import { EXERCISES, resolveExerciseName } from '../../../data/exercise.data';
+import { CustomExerciseService, CustomExercise } from '../../../data/custom-exercise.service';
 import { ChartData } from 'chart.js';
 import { TrainingService, TrainingEntry } from '../service/training.service';
 import { Subscription } from 'rxjs';
 
-type ExerciseId = keyof typeof EXERCISES;
 type Period = 'week' | 'month' | 'year';
 interface ChartPoint { label: string; weight: number; }
 
@@ -21,15 +21,26 @@ interface ChartPoint { label: string; weight: number; }
 })
 export class TrainingStrengthComponent implements OnInit, OnDestroy {
   private trainingService = inject(TrainingService);
+  private customExerciseService = inject(CustomExerciseService);
   private sub?: Subscription;
+  private customExercisesSub?: Subscription;
 
-  exercises = Object.entries(EXERCISES)
+  private customExercises: CustomExercise[] = [];
+
+  private readonly builtInExercises = Object.entries(EXERCISES)
     .filter(([, ex]) => ex.category !== 'Cardio')
-    .map(([id, data]) => ({ id: id as ExerciseId, name: data.name }));
+    .map(([id, data]) => ({ id: id as string, name: data.name }));
 
-  private _selectedExerciseId: ExerciseId = this.exercises[0].id;
-  get selectedExerciseId(): ExerciseId { return this._selectedExerciseId; }
-  set selectedExerciseId(val: ExerciseId) {
+  get exercises() {
+    return [
+      ...this.builtInExercises,
+      ...this.customExercises.filter(c => !c.isCardio).map(c => ({ id: c.id, name: c.name })),
+    ];
+  }
+
+  private _selectedExerciseId: string = this.builtInExercises[0].id;
+  get selectedExerciseId(): string { return this._selectedExerciseId; }
+  set selectedExerciseId(val: string) {
     this._selectedExerciseId = val;
     this.loadTrainings();
   }
@@ -38,15 +49,21 @@ export class TrainingStrengthComponent implements OnInit, OnDestroy {
   trainings: TrainingEntry[] = [];
 
   get selectedExercise() {
-    return EXERCISES[this.selectedExerciseId];
+    return {
+      name: resolveExerciseName(this.selectedExerciseId, this.customExercises),
+      unit: 'kg',
+    };
   }
 
   ngOnInit() {
     this.loadTrainings();
+    this.customExercisesSub = this.customExerciseService.getMyCustomExercises()
+      .subscribe(list => this.customExercises = list);
   }
 
   ngOnDestroy() {
     this.sub?.unsubscribe();
+    this.customExercisesSub?.unsubscribe();
   }
 
   private loadTrainings() {

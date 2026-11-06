@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -8,11 +8,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import confetti from 'canvas-confetti';
-import { EXERCISES, ExerciseId } from '../../../../data/exercise.data';
-import { TrainingService } from '../../../../layouts/training/service/training.service';
+import { EXERCISES, resolveExerciseName } from '../../../../data/exercise.data';
+import { CustomExerciseService, CustomExercise } from '../../../../data/custom-exercise.service';
+import { TrainingService, TrainingEntry } from '../../../../layouts/training/service/training.service';
 import { ToastService } from '../../../../shared/toast/toast.service';
+import { Subscription } from 'rxjs';
 
 type TrainingType = 'strength' | 'cardio' | 'body';
+const WEIGHT_INCREMENT_KG = 2.5;
 
 @Component({
   selector: 'app-add-training-dialog',
@@ -25,31 +28,68 @@ type TrainingType = 'strength' | 'cardio' | 'body';
   templateUrl: './add-training-dialog.component.html',
   styleUrl: './add-training-dialog.component.scss',
 })
-export class AddTrainingDialogComponent {
+export class AddTrainingDialogComponent implements OnInit, OnDestroy {
   private dialogRef = inject(MatDialogRef<AddTrainingDialogComponent>);
   private trainingService = inject(TrainingService);
+  private customExerciseService = inject(CustomExerciseService);
   private toast = inject(ToastService);
+
+  private customExercises: CustomExercise[] = [];
+  private customExercisesSub?: Subscription;
+  private lastEntrySub?: Subscription;
 
   activeType: TrainingType = 'strength';
 
-  strengthExercises = Object.entries(EXERCISES)
+  private readonly builtInStrengthExercises = Object.entries(EXERCISES)
     .filter(([, ex]) => ex.category !== 'Cardio')
-    .map(([id, ex]) => ({ id: id as ExerciseId, label: ex.name }));
+    .map(([id, ex]) => ({ id: id as string, label: ex.name }));
 
-  cardioExercises = Object.entries(EXERCISES)
+  private readonly builtInCardioExercises = Object.entries(EXERCISES)
     .filter(([, ex]) => ex.category === 'Cardio')
-    .map(([id, ex]) => ({ id: id as ExerciseId, label: ex.name }));
+    .map(([id, ex]) => ({ id: id as string, label: ex.name }));
 
-  selectedStrengthExercise: ExerciseId = this.strengthExercises[0].id;
+  get strengthExercises() {
+    return [
+      ...this.builtInStrengthExercises,
+      ...this.customExercises.filter(c => !c.isCardio).map(c => ({ id: c.id, label: c.name })),
+    ];
+  }
+
+  get cardioExercises() {
+    return [
+      ...this.builtInCardioExercises,
+      ...this.customExercises.filter(c => c.isCardio).map(c => ({ id: c.id, label: c.name })),
+    ];
+  }
+
+  selectedStrengthExercise: string = this.builtInStrengthExercises[0].id;
   kg = 0; wdh = 0; saetze = 0;
 
-  selectedCardioExercise: ExerciseId = this.cardioExercises[0].id;
+  selectedCardioExercise: string = this.builtInCardioExercises[0].id;
   dauer = 0; distanz = 0;
 
   koerpergewicht = 0;
   notes = '';
   saving = false;
   error = '';
+
+  // ── Eigene Übung anlegen ──────────────────────────────
+  showAddExercise = false;
+  newExerciseName = '';
+
+  // ── Progressions-Vorschlag ────────────────────────────
+  lastStrengthEntry: TrainingEntry | null = null;
+
+  ngOnInit() {
+    this.customExercisesSub = this.customExerciseService.getMyCustomExercises()
+      .subscribe(list => this.customExercises = list);
+    this.loadLastStrengthEntry();
+  }
+
+  ngOnDestroy() {
+    this.customExercisesSub?.unsubscribe();
+    this.lastEntrySub?.unsubscribe();
+  }
 
   get pace(): string {
     if (!this.distanz || !this.dauer) return '–';
@@ -61,6 +101,57 @@ export class AddTrainingDialogComponent {
 
   setType(type: TrainingType) { this.activeType = type; this.error = ''; }
   close() { this.dialogRef.close(); }
+
+  onStrengthExerciseChange() {
+    this.loadLastStrengthEntry();
+  }
+
+  private loadLastStrengthEntry() {
+    this.lastEntrySub?.unsubscribe();
+    this.lastStrengthEntry = null;
+    this.lastEntrySub = this.trainingService.getStrengthTrainings(this.selectedStrengthExercise)
+      .subscribe(entries => this.lastStrengthEntry = entries.length ? entries[entries.length - 1] : null);
+  }
+
+  get suggestedWeight(): number | null {
+    const last = this.lastStrengthEntry;
+    if (last?.weight === undefined) return null;
+    return last.weight + WEIGHT_INCREMENT_KG;
+  }
+
+  applySuggestion() {
+    const last = this.lastStrengthEntry;
+    if (!last) return;
+    this.kg = this.suggestedWeight ?? last.weight ?? this.kg;
+    this.wdh = last.reps ?? this.wdh;
+    this.saetze = last.sets ?? this.saetze;
+  }
+
+  toggleAddExercise() {
+    this.showAddExercise = !this.showAddExercise;
+    this.newExerciseName = '';
+    this.error = '';
+  }
+
+  async saveNewExercise() {
+    if (!this.newExerciseName.trim()) return;
+    const isCardio = this.activeType === 'cardio';
+    try {
+      const id = await this.customExerciseService.addCustomExercise(
+        this.newExerciseName, isCardio ? 'Cardio' : 'Eigene', isCardio
+      );
+      if (isCardio) {
+        this.selectedCardioExercise = id;
+      } else {
+        this.selectedStrengthExercise = id;
+        this.onStrengthExerciseChange();
+      }
+      this.toast.success('Übung hinzugefügt!');
+      this.toggleAddExercise();
+    } catch {
+      this.error = 'Übung konnte nicht gespeichert werden.';
+    }
+  }
 
   async save() {
     this.error = '';
@@ -74,7 +165,7 @@ export class AddTrainingDialogComponent {
         );
         if (isPR) {
           this.firePRConfetti();
-          this.toast.pr(`🏆 Neues PR! ${this.kg} kg ${EXERCISES[this.selectedStrengthExercise].name}`);
+          this.toast.pr(`🏆 Neues PR! ${this.kg} kg ${resolveExerciseName(this.selectedStrengthExercise, this.customExercises)}`);
         } else {
           this.toast.success('Training gespeichert!');
         }
