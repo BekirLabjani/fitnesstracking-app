@@ -26,21 +26,13 @@ import { TrainingBodyComponent } from './training-body/training-body.component';
 })
 export class TrainingComponent {
   activeTab: 'strength' | 'cardio' | 'body' | 'stats' = 'strength';
-
-
   isMenuOpen = false;
+
   onMenuToggle(isOpen: boolean) {
     this.isMenuOpen = isOpen;
   }
 
-
-onTabChange(tab: 'strength' | 'cardio' | 'body' | 'stats') {
-  this.activeTab = tab;
-}
-
-ngOnInit() {
-  console.log('Nav activeTab:', this.activeTab);
-}
-
-
+  onTabChange(tab: 'strength' | 'cardio' | 'body' | 'stats') {
+    this.activeTab = tab;
+  }
 }

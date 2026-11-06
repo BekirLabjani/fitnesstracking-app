@@ -7,9 +7,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Auth } from '@angular/fire/auth';
-import {
-  getFirestore, collection, doc, setDoc, onSnapshot, deleteField, updateDoc
-} from 'firebase/firestore';
+import { Firestore } from '@angular/fire/firestore';
+import { doc, setDoc, onSnapshot } from 'firebase/firestore';
 import { EXERCISES, ExerciseId } from '../../data/exercise.data';
 import { Subscription } from 'rxjs';
 
@@ -28,7 +27,7 @@ type WeekPlan = Record<string, DayPlan>;
 })
 export class TrainingsplanComponent implements OnInit, OnDestroy {
   private auth = inject(Auth);
-  private db = getFirestore();
+  private db = inject(Firestore);
   private unsub?: () => void;
 
   days = DAYS;

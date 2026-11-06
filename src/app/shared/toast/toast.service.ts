@@ -9,9 +9,13 @@ export interface Toast {
 @Injectable({ providedIn: 'root' })
 export class ToastService {
   toasts = signal<Toast[]>([]);
+  private nextId = 0;
 
   show(message: string, type: Toast['type'] = 'success', duration = 3000) {
-    const id = Date.now();
+    // A counter, not Date.now(): two toasts fired in the same millisecond
+    // (e.g. two quick successive saves) would otherwise get the same id,
+    // and dismissing one would dismiss both.
+    const id = this.nextId++;
     this.toasts.update(t => [...t, { id, message, type }]);
     setTimeout(() => this.dismiss(id), duration);
   }
