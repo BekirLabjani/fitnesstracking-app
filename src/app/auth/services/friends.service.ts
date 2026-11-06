@@ -1,9 +1,11 @@
 import { Injectable, inject } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
+import { Firestore } from '@angular/fire/firestore';
 import {
-  getFirestore,
   collection,
-  addDoc,
+  doc,
+  getDoc,
+  setDoc,
   query,
   where,
   onSnapshot,
@@ -28,7 +30,7 @@ export interface FriendBestLift {
 @Injectable({ providedIn: 'root' })
 export class FriendsService {
   private auth = inject(Auth);
-  private get db() { return getFirestore(); }
+  private db = inject(Firestore);
   private get uid() { return this.auth.currentUser?.uid ?? null; }
 
   get myInviteCode(): string {
@@ -49,14 +51,13 @@ export class FriendsService {
     const followedId = friendDoc.id;
     if (followedId === this.uid) throw new Error('Du kannst dich nicht selbst hinzufügen.');
 
-    const existing = await getDocs(query(
-      collection(this.db, 'friends'),
-      where('followerId', '==', this.uid),
-      where('followedId', '==', followedId)
-    ));
-    if (!existing.empty) throw new Error('Bereits befreundet.');
+    // Deterministic ID (<followerId>_<followedId>) so the Firestore rules
+    // for `trainings` can check this relation with exists() by path.
+    const relationRef = doc(this.db, 'friends', `${this.uid}_${followedId}`);
+    const existing = await getDoc(relationRef);
+    if (existing.exists()) throw new Error('Bereits befreundet.');
 
-    await addDoc(collection(this.db, 'friends'), {
+    await setDoc(relationRef, {
       followerId: this.uid,
       followedId,
       followedName: friendDoc.data()['displayName'] ?? 'Unbekannt',
@@ -98,7 +99,6 @@ export class FriendsService {
 
   async saveMyProfile() {
     if (!this.uid || !this.auth.currentUser) return;
-    const { setDoc, doc } = await import('firebase/firestore');
     await setDoc(doc(this.db, 'userProfiles', this.uid), {
       displayName: this.auth.currentUser.displayName ?? '',
       codePrefix: this.uid.substring(0, 8).toLowerCase(),

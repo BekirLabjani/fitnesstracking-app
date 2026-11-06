@@ -8,15 +8,34 @@ service cloud.firestore {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
 
-    // Trainings: nur eigene Einträge
-    match /trainings/{trainingId} {
-      allow read, write: if request.auth != null && resource.data.userId == request.auth.uid;
-      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+    // Öffentliche Profil-Felder (Name, Invite-Code, Avatar, Größe):
+    // lesbar für alle eingeloggten Nutzer (nötig für Freundessuche & Freundesliste),
+    // schreibbar nur vom Besitzer.
+    match /userProfiles/{userId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == userId;
     }
 
-    // Gewicht: nur eigene Einträge
-    match /weights/{weightId} {
-      allow read, write: if request.auth != null && resource.data.userId == request.auth.uid;
+    // Freundschaftsbeziehungen: Dokument-ID ist deterministisch
+    // "<followerId>_<followedId>", damit die trainings-Regel unten sie
+    // per exists() prüfen kann.
+    match /friends/{friendId} {
+      allow read: if request.auth != null && resource.data.followerId == request.auth.uid;
+      allow create: if request.auth != null
+        && request.resource.data.followerId == request.auth.uid
+        && friendId == request.auth.uid + '_' + request.resource.data.followedId;
+      allow delete: if request.auth != null && resource.data.followerId == request.auth.uid;
+    }
+
+    // Trainings: eigene Einträge voll lesbar/schreibbar; Einträge von Freunden
+    // (denen man per /friends folgt) sind nur lesbar, damit Bestleistungen
+    // von Freunden angezeigt werden können.
+    match /trainings/{trainingId} {
+      allow read: if request.auth != null && (
+        resource.data.userId == request.auth.uid ||
+        exists(/databases/$(database)/documents/friends/$(request.auth.uid + '_' + resource.data.userId))
+      );
+      allow write: if request.auth != null && resource.data.userId == request.auth.uid;
       allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
     }
 

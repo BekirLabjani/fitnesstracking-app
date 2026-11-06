@@ -5,7 +5,8 @@ import { BaseChartDirective } from 'ng2-charts';
 import { ChartData, ChartOptions } from 'chart.js';
 import { TrainingService, TrainingEntry } from '../service/training.service';
 import { Auth } from '@angular/fire/auth';
-import { getFirestore, doc, setDoc, onSnapshot } from 'firebase/firestore';
+import { Firestore } from '@angular/fire/firestore';
+import { doc, setDoc, onSnapshot } from 'firebase/firestore';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -18,7 +19,7 @@ import { Subscription } from 'rxjs';
 export class TrainingBodyComponent implements OnInit, OnDestroy {
   private trainingService = inject(TrainingService);
   private fireAuth = inject(Auth);
-  private db = getFirestore();
+  private db = inject(Firestore);
   private sub?: Subscription;
   private profileUnsub?: () => void;
 

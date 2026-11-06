@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, Output, EventEmitter, OnInit, OnDestroy, inject } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
-import { getFirestore, doc, onSnapshot } from 'firebase/firestore';
+import { Firestore } from '@angular/fire/firestore';
+import { doc, onSnapshot } from 'firebase/firestore';
 
 @Component({
   selector: 'app-header',
@@ -12,7 +13,7 @@ import { getFirestore, doc, onSnapshot } from 'firebase/firestore';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   private fireAuth = inject(Auth);
-  private db = getFirestore();
+  private db = inject(Firestore);
   private unsub?: () => void;
 
   @Output() toggleProfile = new EventEmitter<void>();

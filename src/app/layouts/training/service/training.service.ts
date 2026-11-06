@@ -1,10 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
+import { Firestore } from '@angular/fire/firestore';
 import {
-  getFirestore,
-  initializeFirestore,
-  persistentLocalCache,
-  persistentMultipleTabManager,
   collection,
   addDoc,
   deleteDoc,
@@ -14,7 +11,6 @@ import {
   onSnapshot,
   serverTimestamp,
 } from 'firebase/firestore';
-import { getApp } from 'firebase/app';
 import { Observable, of } from 'rxjs';
 
 export interface TrainingEntry {
@@ -33,27 +29,11 @@ export interface TrainingEntry {
   createdAt?: any;
 }
 
-let firestoreInitialized = false;
-
-function getDb() {
-  if (!firestoreInitialized) {
-    try {
-      initializeFirestore(getApp(), {
-        localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
-      });
-      firestoreInitialized = true;
-    } catch {
-      // Already initialized
-    }
-  }
-  return getFirestore();
-}
-
 @Injectable({ providedIn: 'root' })
 export class TrainingService {
   private auth = inject(Auth);
+  private db = inject(Firestore);
 
-  private get db() { return getDb(); }
   private get uid(): string | null { return this.auth.currentUser?.uid ?? null; }
   private today(): string { return new Date().toISOString().split('T')[0]; }
 

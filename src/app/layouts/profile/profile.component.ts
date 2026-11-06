@@ -4,7 +4,8 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { Router } from '@angular/router';
 import { AuthServiceService } from '../../auth/services/auth.service.service';
 import { Auth } from '@angular/fire/auth';
-import { getFirestore, doc, setDoc, onSnapshot } from 'firebase/firestore';
+import { Firestore } from '@angular/fire/firestore';
+import { doc, setDoc, onSnapshot } from 'firebase/firestore';
 
 @Component({
   selector: 'app-profile',
@@ -20,7 +21,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private authService = inject(AuthServiceService);
   private fireAuth = inject(Auth);
   private router = inject(Router);
-  private db = getFirestore();
+  private db = inject(Firestore);
   private profileUnsub?: () => void;
 
   displayName = '';
