@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogRef } from '@angular/material/dialog';
+import { TEST_PROVIDERS } from '../../../../../testing/test-providers';
 
 import { AddTrainingDialogComponent } from './add-training-dialog.component';
 
@@ -8,7 +10,11 @@ describe('AddTrainingDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AddTrainingDialogComponent]
+      imports: [AddTrainingDialogComponent],
+      providers: [
+        TEST_PROVIDERS,
+        { provide: MatDialogRef, useValue: { close: () => {} } },
+      ],
     })
     .compileComponents();
     

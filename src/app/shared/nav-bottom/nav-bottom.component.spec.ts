@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TEST_PROVIDERS } from '../../../testing/test-providers';
 
 import { NavBottomComponent } from './nav-bottom.component';
 
@@ -8,7 +9,8 @@ describe('NavBottomComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NavBottomComponent]
+      imports: [NavBottomComponent],
+      providers: [TEST_PROVIDERS]
     })
     .compileComponents();
     
