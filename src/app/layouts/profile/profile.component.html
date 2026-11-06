@@ -12,8 +12,8 @@
       <input #fileInput type="file" accept="image/*" hidden (change)="onFileSelected($event)" />
 
       <div class="avatar" (click)="onAvatarClick(fileInput)">
-        <img *ngIf="photoBase64 && !uploading" [src]="photoBase64" alt="Profilbild" />
-        <div *ngIf="!photoBase64 && !uploading" class="avatar-initials">
+        <img *ngIf="photoUrl && !uploading" [src]="photoUrl" alt="Profilbild" />
+        <div *ngIf="!photoUrl && !uploading" class="avatar-initials">
           {{ displayName.slice(0, 2).toUpperCase() }}
         </div>
         <div *ngIf="uploading" class="avatar-uploading">⏳</div>

@@ -46,7 +46,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   loadingLifts = false;
 
   ngOnInit() {
-    this.myCode = this.friendsService.myInviteCode;
+    this.friendsService.getOrCreateMyCode().then(code => this.myCode = code);
     this.sub = this.friendsService.getMyFriends().subscribe(f => this.friends = f);
     this.friendsService.saveMyProfile();
   }

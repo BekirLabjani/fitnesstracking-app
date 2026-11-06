@@ -20,14 +20,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   today = new Date().toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' });
   displayName = '';
-  photoBase64 = '';
+  photoUrl = '';
 
   ngOnInit() {
     const u = this.fireAuth.currentUser;
     this.displayName = u?.displayName ?? 'User';
     if (u) {
       this.unsub = onSnapshot(doc(this.db, 'userProfiles', u.uid), snap => {
-        this.photoBase64 = snap.data()?.['photoBase64'] ?? '';
+        const data = snap.data();
+        // photoBase64 is a legacy field from before avatars moved to Firebase
+        // Storage — kept as a fallback so existing users don't lose their photo.
+        this.photoUrl = data?.['photoUrl'] ?? data?.['photoBase64'] ?? '';
       });
     }
   }

@@ -2,7 +2,7 @@
   <p class="data-text">{{ today }}</p>
 
   <button class="profile-avatar" (click)="openSheet()">
-    <img *ngIf="photoBase64" [src]="photoBase64" alt="Avatar" class="avatar-img" />
-    <span *ngIf="!photoBase64" class="initials">{{ initials }}</span>
+    <img *ngIf="photoUrl" [src]="photoUrl" alt="Avatar" class="avatar-img" />
+    <span *ngIf="!photoUrl" class="initials">{{ initials }}</span>
   </button>
 </header>

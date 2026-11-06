@@ -33,8 +33,42 @@ export class FriendsService {
   private db = inject(Firestore);
   private get uid() { return this.auth.currentUser?.uid ?? null; }
 
-  get myInviteCode(): string {
-    return this.uid?.substring(0, 8).toUpperCase() ?? '';
+  // No 0/O/1/I/L to avoid characters users could misread when sharing a code.
+  private static readonly CODE_ALPHABET = '23456789ABCDEFGHJKMNPQRSTUVWXYZ';
+  private static readonly CODE_LENGTH = 8;
+  private static readonly MAX_GENERATION_ATTEMPTS = 5;
+
+  private generateCode(): string {
+    let code = '';
+    for (let i = 0; i < FriendsService.CODE_LENGTH; i++) {
+      code += FriendsService.CODE_ALPHABET[Math.floor(Math.random() * FriendsService.CODE_ALPHABET.length)];
+    }
+    return code;
+  }
+
+  /**
+   * Returns this user's invite code, generating and persisting a random,
+   * collision-checked one on first call. Previously this was just the first
+   * 8 characters of the Firebase UID — guessable/collision-prone at scale.
+   */
+  async getOrCreateMyCode(): Promise<string> {
+    if (!this.uid) return '';
+    const myRef = doc(this.db, 'userProfiles', this.uid);
+    const mySnap = await getDoc(myRef);
+    const existing = mySnap.data()?.['codePrefix'];
+    if (existing) return (existing as string).toUpperCase();
+
+    for (let attempt = 0; attempt < FriendsService.MAX_GENERATION_ATTEMPTS; attempt++) {
+      const candidate = this.generateCode();
+      const clash = await getDocs(
+        query(collection(this.db, 'userProfiles'), where('codePrefix', '==', candidate.toLowerCase()))
+      );
+      if (clash.empty) {
+        await setDoc(myRef, { codePrefix: candidate.toLowerCase() }, { merge: true });
+        return candidate;
+      }
+    }
+    throw new Error('Konnte keinen eindeutigen Code generieren. Bitte erneut versuchen.');
   }
 
   async addFriend(code: string): Promise<string> {
@@ -99,9 +133,11 @@ export class FriendsService {
 
   async saveMyProfile() {
     if (!this.uid || !this.auth.currentUser) return;
+    // Only displayName here — codePrefix is owned by getOrCreateMyCode()
+    // and must never be overwritten, or a user's shared invite code would
+    // silently stop working for people who already saved it.
     await setDoc(doc(this.db, 'userProfiles', this.uid), {
       displayName: this.auth.currentUser.displayName ?? '',
-      codePrefix: this.uid.substring(0, 8).toLowerCase(),
     }, { merge: true });
   }
 }
