@@ -1,0 +1,20 @@
+# SDE — What Was Built / Fixed
+
+## fitness-tracker-hardening (this session)
+Fixed every item from the discovery review, in dependency order:
+
+1. **Firestore rules bug (critical):** `userProfiles` and `friends` collections had no rule and were silently blocked by the catch-all deny — the entire Friends feature was broken. Added scoped rules; `trainings` read access extended to friends via `exists()` check against a friend-relation doc.
+2. **`FriendsService` relation ID:** switched from `addDoc` (random ID) to `setDoc` with deterministic ID `"<followerId>_<followedId>"` — required so the new Firestore rule can check the relation with `exists()` by path instead of a query.
+3. **Firestore DI/init bug:** offline persistence (`persistentLocalCache`) was only reliably enabled if `TrainingService` happened to construct before any other code called `getFirestore()` — an initialization-order race. Moved `initializeFirestore(...)` into `app.config.ts`'s `provideFirestore` factory (DI context, runs once) and switched every consumer (`TrainingService`, `FriendsService`, `HeaderComponent`, `ProfileComponent`, `TrainingBodyComponent`) to `inject(Firestore)` instead of ad-hoc `getFirestore()` calls.
+4. **PWA service worker never registered:** `angular.json` built `ngsw-worker.js` on every prod build, but `provideServiceWorker()` was never called — the app was never actually a working offline PWA. Added it to `app.config.ts`, confirmed `ngsw-worker.js`/`ngsw.json` ship in `dist/` and register in prod.
+5. **Missing Firestore composite indexes:** `trainings` queries filter on `userId`+`type`(+`exerciseId`); `firestore.indexes.json` was empty. Added both composite indexes.
+6. **Dead code removed:** `feature/wight/add-wight/*` — an empty, unused scaffold component (typo'd name, never imported, real body-weight entry lives in `training-body`).
+7. **Test suite was 100% unmodified Angular CLI scaffolds, 17/25 failing** (`node_modules` had never even been installed before this session, so this had never been run). Added `src/testing/test-providers.ts` (shared Firebase/Router/NoopAnimations providers + Chart.js registerables, since `main.ts`'s `Chart.register()` never runs in the Karma bundle) and wired it into all 17 previously-failing specs. Also fixed `app.component.spec.ts`, which asserted a `title` property that doesn't exist on the real component (leftover from the CLI default template, never updated). All 25 specs pass now.
+8. **`package.json`/install:** `@angular/service-worker` was pinned to `^21.2.15` against an Angular 17 project — `npm install` failed outright. Corrected to `^17.0.0`.
+9. **`npm audit fix`** (non-breaking only): 99 → 70 vulnerabilities. Remaining 70 all require `@angular-devkit/build-angular@21` (major breaking upgrade of the whole build toolchain) and are in `webpack-dev-server`/`webpack-dev-middleware` — dev-time only, not shipped to production. Left as a deliberate, flagged trade-off rather than risking an untested major toolchain bump.
+10. **CI pipeline added** (`.github/workflows/ci.yml`): build (prod) + unit tests on push/PR to `main`.
+11. **Hosting security headers** (`firebase.json`): added `Referrer-Policy`, `Strict-Transport-Security`. Did **not** add a `Content-Security-Policy` — Google Sign-In popup + Firebase Auth/Firestore domains need to be allowlisted carefully and this needs to be verified against a live login flow before shipping; flagged as a follow-up, not guessed at blind.
+
+## Not changed (flagged, deliberately out of scope)
+- Profile avatars are stored as base64 strings directly in Firestore docs even though Firebase Storage is already provisioned (`provideStorage` in `app.config.ts`) and unused. Works today, but bloats every `userProfiles` read/listener with image bytes. Migrating to Storage is a real feature change (upload flow, URL field, cache-busting) — needs its own mini design pass, not a blind refactor.
+- Friend invite code is the first 8 lowercase chars of the Firebase UID — low collision risk at current scale, flagged in the original security review, not fixed (would need a dedicated random-code generator + uniqueness check).
