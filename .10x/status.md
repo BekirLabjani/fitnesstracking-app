@@ -1,6 +1,6 @@
 # Project Status
 
-**Phase:** Premium-Tier — Implementation Complete, Pending Deploy
+**Phase:** Premium-Tier — Deployed to Production
 **Date:** 2026-11-07
 
 ## Task Progress
@@ -24,7 +24,7 @@
 - [x] Free-tier features (session 4): progression suggestions in add-training dialog; custom exercises (new `customExercises` collection + service, wired into add dialog, strength/cardio pickers, dashboard, trainingsplan). Known gap: friends' custom exercises don't resolve to a name in the friend-comparison view (flagged, not fixed — needs a permission-model decision)
 - [x] Infra foundations (session 5): Firebase Emulator Suite for local dev (was sharing live prod project with no isolation — fixed), GitHub Actions PR-preview deploys, GitHub Actions auto-deploy-to-prod on merge to `main` (gated by tests), GCP billing-alert instructions handed to user (manual, can't be done from repo). Needs `FIREBASE_SERVICE_ACCOUNT` GitHub secret + a push to `origin/main` before the new workflows actually run.
 
-- [x] Premium tier (session 6): spec + ADR-001 (entitlement model: `entitlements/{userId}`, read-only from client) + full decision trail (CTO/PM/Architect/Staff-Engineer/EM/Senior-Engineer/QA/Security/DevOps/SRE). Built: `PremiumService`+`premiumGuard`, `/upgrade` pricing page, Pro stats tab (volume trend, muscle-group breakdown, per-exercise progress), CSV export in Settings, workout-templates library (`/trainingsplan/templates`). 37/37 tests passing (9 new), production build clean. **Not yet deployed** — needs `firebase deploy --only firestore` then `--only hosting`, plus the user manually setting `entitlements/<uid> = {isPremium: true}` in the Firebase Console to actually grant anyone premium (see `.10x/decisions/devops/premium-tier.md`).
+- [x] Premium tier (session 6): spec + ADR-001 (entitlement model: `entitlements/{userId}`, read-only from client) + full decision trail (CTO/PM/Architect/Staff-Engineer/EM/Senior-Engineer/QA/Security/DevOps/SRE). Built: `PremiumService`+`premiumGuard`, `/upgrade` pricing page, Pro stats tab (volume trend, muscle-group breakdown, per-exercise progress), CSV export in Settings, workout-templates library (`/trainingsplan/templates`). 37/37 tests passing (9 new), production build clean. **Deployed** (session 7): `firestore` rules + `hosting` both live in production. User manually granted themselves premium via `entitlements/<uid> = {isPremium: true}` in the Firebase Console before deploy.
 
 ## Notes
 `node_modules` had never been installed in this project before this session, and the test suite had apparently never been run — all 25 specs were untouched Angular CLI scaffolds, 17 of them actually broken.

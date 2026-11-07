@@ -1,18 +1,18 @@
 # Current Handoff
 
-**From:** DevOps/SRE (session 6 — premium-tier delivery)
+**From:** DevOps/SRE (session 7 — premium-tier deploy)
 **To:** User
 
-`premium-tier` is fully built and verified (37/37 tests, production build clean) but **not deployed yet**. Two things needed from you:
-
-1. **Deploy** (I'll run these with your confirmation, same as this session's other deploys): `firebase deploy --only firestore` (new `entitlements` rule) then `firebase deploy --only hosting` (new routes/components). Say the word and I'll run them.
-2. **To actually grant anyone premium** (including yourself, for testing): Firebase Console → Firestore → create collection `entitlements` → document ID = your Auth UID → field `isPremium: true` (boolean). Full steps in `.10x/decisions/devops/premium-tier.md`.
+`premium-tier` is deployed to production: `firebase deploy --only firestore` (new `entitlements` rule) and `firebase deploy --only hosting` both ran clean. Live at https://fitnesstracker-d54a5.web.app. User granted themselves premium (`entitlements/<uid> = {isPremium: true}`, email `Business.life.bekir@gmail.com`) via the Firebase Console before the deploy.
 
 What was built: `/upgrade` pricing page (monthly/lifetime, mailto CTA — no real checkout yet, see ADR-001 for why), a new "Pro" tab in Training with 3 charts (volume trend, muscle groups, per-exercise progress), CSV export in Settings, and a workout-templates library at `/trainingsplan/templates` (4 predefined plans: PPL, Ganzkörper 3x, 5x5, Anfänger-Fullbody). All three gated the same way: not-premium users see an upsell/lock pointing to `/upgrade` instead of being blocked outright.
 
-Manual QA still needed after deploy (not something I can click through myself): see the 4-step checklist in `.10x/decisions/qa/premium-tier.md`.
+Manual QA still needed (not something I can click through myself): see the 4-step checklist in `.10x/decisions/qa/premium-tier.md` — confirm all three premium surfaces actually render on the live site now that premium is granted, not just in the dev build.
 
 ## History
+
+### DevOps/SRE (session 6 — premium-tier delivery)
+Built and verified premium-tier (37/37 tests, production build clean), not yet deployed at that point. Deployed in session 7 (see Current Handoff above).
 
 ### DevOps Engineer (session 5 — infra foundations)
 **To:** User
