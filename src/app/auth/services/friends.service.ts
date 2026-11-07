@@ -27,6 +27,12 @@ export interface FriendBestLift {
   weight: number;
 }
 
+export interface WeeklyLeaderboardEntry {
+  name: string;
+  volume: number;
+  isMe: boolean;
+}
+
 @Injectable({ providedIn: 'root' })
 export class FriendsService {
   private auth = inject(Auth);
@@ -129,6 +135,46 @@ export class FriendsService {
       exerciseName: EXERCISES[id as keyof typeof EXERCISES]?.name ?? id,
       weight,
     })).sort((a, b) => b.weight - a.weight);
+  }
+
+  /** Monday (ISO) of the current week, as a 'YYYY-MM-DD' string for lexicographic date comparison. */
+  private currentWeekStart(): string {
+    const now = new Date();
+    const isoDay = now.getUTCDay() || 7; // Sunday=0 -> 7, Monday=1..Saturday=6
+    const monday = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - isoDay + 1));
+    return monday.toISOString().split('T')[0];
+  }
+
+  private async weeklyStrengthVolume(userId: string, weekStart: string): Promise<number> {
+    const snap = await getDocs(query(
+      collection(this.db, 'trainings'),
+      where('userId', '==', userId),
+      where('type', '==', 'strength')
+    ));
+    return snap.docs
+      .map(d => d.data())
+      .filter(t => (t['date'] as string) >= weekStart)
+      .reduce((sum, t) => sum + (t['weight'] ?? 0) * (t['reps'] ?? 0) * (t['sets'] ?? 0), 0);
+  }
+
+  /** This week's (Mon-today) strength training volume for me and my friends, ranked descending. */
+  async getWeeklyVolumeLeaderboard(): Promise<WeeklyLeaderboardEntry[]> {
+    if (!this.uid) return [];
+    const weekStart = this.currentWeekStart();
+
+    const myProfileSnap = await getDoc(doc(this.db, 'userProfiles', this.uid));
+    const myName = myProfileSnap.data()?.['displayName'] || 'Ich';
+    const myVolume = await this.weeklyStrengthVolume(this.uid, weekStart);
+
+    const friendsSnap = await getDocs(query(collection(this.db, 'friends'), where('followerId', '==', this.uid)));
+    const friendEntries = await Promise.all(friendsSnap.docs.map(async d => {
+      const data = d.data();
+      const volume = await this.weeklyStrengthVolume(data['followedId'], weekStart);
+      return { name: data['followedName'] ?? 'Unbekannt', volume, isMe: false };
+    }));
+
+    return [{ name: myName, volume: myVolume, isMe: true }, ...friendEntries]
+      .sort((a, b) => b.volume - a.volume);
   }
 
   async saveMyProfile() {

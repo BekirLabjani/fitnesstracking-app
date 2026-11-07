@@ -131,6 +131,35 @@
 /* ── Freunde ── */
 .add-friend { margin-bottom: 14px; }
 
+.leaderboard-section {
+  margin-bottom: 8px;
+}
+
+.leaderboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.leaderboard-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: var(--radius-s);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+
+  &.me {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+  }
+
+  .rank { width: 24px; font-size: 14px; text-align: center; }
+  .lb-name { flex: 1; font-size: 13px; font-weight: 600; color: var(--text-1); }
+  .lb-volume { font-size: 13px; font-weight: 700; color: var(--text-2); }
+}
+
 .section-label {
   font-size: 11px;
   font-weight: 700;

@@ -1,6 +1,6 @@
 # Project Status
 
-**Phase:** Nav/Burger Redesign + Full Profile Page — Deployed to Production
+**Phase:** RPE + Kalorien-Logging + Freunde-Wochenvergleich — Implementation Complete, Pending Deploy
 **Date:** 2026-11-07
 
 ## Task Progress
@@ -29,6 +29,8 @@
 - [x] Premium camera-tracking (session 8): PDF export replaced CSV export in Settings (`jspdf`/`jspdf-autotable`). New Premium feature `/training/camera-tracker` — on-device push-up rep counter using `@mediapipe/tasks-vision` pose landmarks (ADR-002), pure `PoseRepCounter` state machine, "Als Training speichern" writes a real `pushups` training entry. 45/45 tests passing (8 new), production build clean. **Deployed** (session 8): `hosting` live in production.
 
 - [x] Nav/burger redesign + full profile page (session 9): fixed a real bug where `/profile` rendered the dashboard's bottom-sheet component with no `[open]` input (so it was invisible) — `/profile` now routes to a new `ProfilePageComponent` with body data (gender/age/height/weight), activity level, and a Mifflin-St Jeor calorie calculator (`calculateBmr`/`calculateTdee` in `shared/calorie/calorie-calculator.ts`) with a manual-override toggle. New `UserProfileService` (mirrors `PremiumService`'s `onSnapshot` pattern) backs both the new page and the training drawer's profile preview. Training page's burger drawer (`training-header`) rebuilt with theme-aware tokens (was hardcoded dark hex, ignored light mode), added a profile preview, Trainingsplan/Settings/Upgrade links, removed a duplicate Dashboard entry. Fixed a real wiring bug: the drawer's `(menuToggle)` output was never bound to `training.component.ts`'s `onMenuToggle()`, so the tab bar never actually hid while the drawer was open. 56/56 tests passing (11 new), production build clean. **Deployed** (session 9): `hosting` live in production.
+
+- [x] RPE tracking + calorie logging + friends weekly leaderboard (session 10): three top feature-brainstorm picks implemented. RPE (1-10) is an optional field on strength `trainings` entries, captured in the add-training dialog, shown as a badge on dashboard cards — no new collection/rule. New `calorieLogs` collection (private, owner-only, no friend-read unlike `trainings`) + `CalorieLogService` + `AddCalorieDialogComponent` (reachable from the nav-bottom long-press add-menu) + a Dashboard widget comparing today's logged kcal against the profile's calorie goal (`getEffectiveCalorieGoal()`, shared between `ProfilePageComponent` and the dashboard to avoid duplicating the auto/manual-mode logic). Friends weekly volume leaderboard computed live from existing `trainings` reads (no new collection, reuses the existing friend-read rule) — shown in the Freunde panel of the dashboard's profile sheet. 69/69 tests passing (13 new), production build clean. **Not yet deployed** — needs `firebase deploy --only firestore` (new `calorieLogs` rule) then `--only hosting`.
 
 ## Notes
 `node_modules` had never been installed in this project before this session, and the test suite had apparently never been run — all 25 specs were untouched Angular CLI scaffolds, 17 of them actually broken.

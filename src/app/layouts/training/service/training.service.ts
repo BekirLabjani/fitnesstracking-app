@@ -22,6 +22,7 @@ export interface TrainingEntry {
   weight?: number;
   reps?: number;
   sets?: number;
+  rpe?: number;
   duration?: number;
   distance?: number;
   bodyWeight?: number;
@@ -37,11 +38,15 @@ export class TrainingService {
   private get uid(): string | null { return this.auth.currentUser?.uid ?? null; }
   private today(): string { return new Date().toISOString().split('T')[0]; }
 
-  async addStrengthTraining(exerciseId: string, weight: number, reps: number, sets: number, notes = '') {
+  async addStrengthTraining(
+    exerciseId: string, weight: number, reps: number, sets: number, notes = '', rpe?: number
+  ) {
     if (!this.uid) throw new Error('Not authenticated');
     return addDoc(collection(this.db, 'trainings'), {
       userId: this.uid, type: 'strength', exerciseId,
-      date: this.today(), weight, reps, sets, notes, createdAt: serverTimestamp(),
+      date: this.today(), weight, reps, sets, notes,
+      ...(rpe !== undefined ? { rpe } : {}),
+      createdAt: serverTimestamp(),
     });
   }
 

@@ -11,7 +11,7 @@ import {
   ACTIVITY_LEVEL_OPTIONS,
   ActivityLevel,
   Gender,
-  calculateTdee,
+  getEffectiveCalorieGoal,
 } from '../../../shared/calorie/calorie-calculator';
 
 @Component({
@@ -72,10 +72,14 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   get calculatedCalories(): number | null {
     if (!this.canCalculateCalories || !this.activityLevel) return null;
-    return calculateTdee(
-      { gender: this.gender as Gender, age: this.age!, heightCm: this.heightCm!, weightKg: this.weightKg! },
-      this.activityLevel as ActivityLevel
-    );
+    return getEffectiveCalorieGoal({
+      calorieMode: 'auto',
+      gender: this.gender as Gender,
+      age: this.age!,
+      heightCm: this.heightCm!,
+      weightKg: this.weightKg!,
+      activityLevel: this.activityLevel as ActivityLevel,
+    });
   }
 
   async save() {

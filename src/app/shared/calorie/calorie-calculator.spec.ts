@@ -1,4 +1,4 @@
-import { calculateBmr, calculateTdee } from './calorie-calculator';
+import { calculateBmr, calculateTdee, getEffectiveCalorieGoal } from './calorie-calculator';
 
 describe('calorie-calculator', () => {
   describe('calculateBmr', () => {
@@ -32,6 +32,27 @@ describe('calorie-calculator', () => {
       const veryActive = calculateTdee(input, 'very_active');
       expect(moderate).toBeGreaterThan(sedentary);
       expect(veryActive).toBeGreaterThan(moderate);
+    });
+  });
+
+  describe('getEffectiveCalorieGoal', () => {
+    it('returns the manual value when calorieMode is manual', () => {
+      expect(getEffectiveCalorieGoal({ calorieMode: 'manual', manualCalories: 2200 })).toBe(2200);
+    });
+
+    it('returns null in manual mode without a manualCalories value', () => {
+      expect(getEffectiveCalorieGoal({ calorieMode: 'manual' })).toBeNull();
+    });
+
+    it('returns null in auto mode when body data is incomplete', () => {
+      expect(getEffectiveCalorieGoal({ calorieMode: 'auto', gender: 'male', age: 30 })).toBeNull();
+    });
+
+    it('calculates TDEE in auto mode once all body data is present', () => {
+      const result = getEffectiveCalorieGoal({
+        calorieMode: 'auto', gender: 'male', age: 30, heightCm: 180, weightKg: 80, activityLevel: 'moderate',
+      });
+      expect(result).toBe(calculateTdee({ gender: 'male', age: 30, heightCm: 180, weightKg: 80 }, 'moderate'));
     });
   });
 });

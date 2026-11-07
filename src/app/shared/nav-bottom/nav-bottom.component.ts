@@ -11,6 +11,7 @@ import {
   MatDialogTitle,
 } from '@angular/material/dialog';
 import { AddUnitDialogComponent } from '../../feature/training/add-training/add-unit-dialog/add-unit-dialog.component';
+import { AddCalorieDialogComponent } from '../../feature/calorie/add-calorie-dialog/add-calorie-dialog.component';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
@@ -77,6 +78,13 @@ showAddMenu = false;
   }
   openAddUnitDialog() {
     this.openAddMenu();
+  }
+
+  openAddCalorieDialog(): void {
+    this.dialog.open(AddCalorieDialogComponent, {
+      height: '460px',
+      width: '600px',
+    });
   }
   openTrainingPage(){
 

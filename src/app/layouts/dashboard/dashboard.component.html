@@ -21,6 +21,27 @@
       <span class="streak-sub">Weiter so!</span>
     </div>
 
+    <!-- Kalorien heute -->
+    <div class="calorie-widget" *ngIf="!loading">
+      <ng-container *ngIf="calorieGoal; else noGoal">
+        <div class="calorie-head">
+          <span class="calorie-title">🔥 Kalorien heute</span>
+          <span class="calorie-value">{{ kcalToday }} / {{ calorieGoal }} kcal</span>
+        </div>
+        <div class="calorie-bar">
+          <div class="calorie-bar-fill" [style.width.%]="calorieProgress"></div>
+        </div>
+      </ng-container>
+      <ng-template #noGoal>
+        <div class="calorie-head">
+          <span class="calorie-title">🔥 Kalorien heute</span>
+          <span class="calorie-value">{{ kcalToday }} kcal</span>
+        </div>
+        <a class="calorie-goal-hint" routerLink="/profile">Kalorienziel im Profil festlegen →</a>
+      </ng-template>
+      <button class="calorie-add-btn" (click)="openAddCalorieDialog()">+ Kalorien eintragen</button>
+    </div>
+
     <!-- Skeleton Loader -->
     <app-skeleton *ngIf="loading" [count]="3"></app-skeleton>
 
@@ -65,6 +86,7 @@
                 <span *ngIf="card.improvement < 0">↓ {{ card.improvement }} kg</span>
                 <span *ngIf="card.improvement === 0">→ Gleiches Gewicht</span>
               </div>
+              <span class="rpe-badge" *ngIf="card.entry.rpe !== undefined">RPE {{ card.entry.rpe }}</span>
               <p class="card-note" *ngIf="card.entry.notes">📝 {{ card.entry.notes }}</p>
             </div>
           </ng-container>

@@ -1,0 +1,48 @@
+<div class="add-section">
+
+  <div class="header-dialog">
+    <h3>🔥 Kalorien eintragen</h3>
+    <button class="close-btn" type="button" (click)="close()">✕</button>
+  </div>
+
+  <div class="content">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Kalorien (kcal)</mat-label>
+      <input matInput type="number" [(ngModel)]="kcal" min="0" placeholder="z.B. 650" />
+    </mat-form-field>
+
+    <button type="button" class="add-exercise-toggle" (click)="toggleMacros()">
+      {{ showMacros ? '✕ Makros ausblenden' : '+ Makros (Protein/Kohlenhydrate/Fett)' }}
+    </button>
+
+    <div class="row-fields" *ngIf="showMacros">
+      <mat-form-field appearance="outline">
+        <mat-label>Protein (g)</mat-label>
+        <input matInput type="number" [(ngModel)]="protein" min="0" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Kohlenh. (g)</mat-label>
+        <input matInput type="number" [(ngModel)]="carbs" min="0" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Fett (g)</mat-label>
+        <input matInput type="number" [(ngModel)]="fat" min="0" />
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width notes-field">
+      <mat-label>📝 Notiz (optional)</mat-label>
+      <input matInput [(ngModel)]="note" placeholder="z.B. Mittagessen" />
+    </mat-form-field>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
+  </div>
+
+  <div class="add-new-unit">
+    <button class="save-btn" type="button" (click)="save()" [disabled]="saving">
+      <mat-spinner *ngIf="saving" diameter="20"></mat-spinner>
+      <span *ngIf="!saving">💾 Speichern</span>
+    </button>
+  </div>
+
+</div>

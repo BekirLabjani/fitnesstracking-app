@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthServiceService } from '../../../auth/services/auth.service.service';
-import { FriendsService, FriendConnection, FriendBestLift } from '../../../auth/services/friends.service';
+import { FriendsService, FriendConnection, FriendBestLift, WeeklyLeaderboardEntry } from '../../../auth/services/friends.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -40,6 +40,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
   friendSuccess = '';
   loadingLifts = false;
 
+  // Wochen-Leaderboard
+  leaderboard: WeeklyLeaderboardEntry[] = [];
+  loadingLeaderboard = false;
+
   ngOnInit() {
     this.friendsService.getOrCreateMyCode().then(code => this.myCode = code);
     this.sub = this.friendsService.getMyFriends().subscribe(f => this.friends = f);
@@ -51,6 +55,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
   openPanel(panel: typeof this.activePanel) {
     this.activePanel = this.activePanel === panel ? 'none' : panel;
     this.securityError = this.friendError = this.friendSuccess = '';
+    if (panel === 'friends') this.loadLeaderboard();
+  }
+
+  private async loadLeaderboard() {
+    this.loadingLeaderboard = true;
+    this.leaderboard = await this.friendsService.getWeeklyVolumeLeaderboard();
+    this.loadingLeaderboard = false;
   }
 
   goToSettings() { this.router.navigate(['/settings']); }

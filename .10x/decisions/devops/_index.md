@@ -1,6 +1,9 @@
 # DevOps — Cross-Cutting Notes
 
-Active features: premium-camera-tracking (session 8), premium-tier (session 6), infra-foundations (session 5)
+Active features: rpe-calorie-leaderboard (session 10), premium-camera-tracking (session 8), premium-tier (session 6), infra-foundations (session 5)
+
+## rpe-calorie-leaderboard (session 10)
+One new Firestore collection (`calorieLogs`, owner-only, no friend-read) needs a rules deploy before hosting. RPE and the friends leaderboard are purely additive — reuse the existing `trainings`/`friends` rules, no deploy ordering concern there. Deploy order: `firestore` then `hosting` (same reasoning as premium-tier — avoid the new UI querying a collection with no rule yet).
 
 ## premium-camera-tracking (session 8)
 Hosting-only deploy, no new rules. New npm dependency `@mediapipe/tasks-vision`, lazy-loaded so it only costs bundle size for users who open the camera-tracker route. See `premium-camera-tracking.md` and ADR-002.

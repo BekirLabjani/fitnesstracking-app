@@ -50,6 +50,13 @@ service cloud.firestore {
       allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
     }
 
+    // Kalorien-Tagebuch: rein privat, kein Freundes-Lesezugriff (anders als
+    // trainings) — Ernährungsdaten sind sensibler als Trainingsgewichte.
+    match /calorieLogs/{entryId} {
+      allow read, update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+
     // Premium-Status: nur über die Firebase Console (Admin-SDK, umgeht
     // Rules) änderbar, niemals über die App. Ein client-beschreibbares
     // Premium-Feld wäre eine Privilegieneskalations-Lücke — siehe ADR-001.

@@ -59,6 +59,19 @@
   <ng-container *ngIf="activePanel === 'friends'">
     <h4 class="panel-title">👥 Freunde</h4>
 
+    <!-- Wochen-Leaderboard -->
+    <div class="leaderboard-section" *ngIf="friends.length > 0">
+      <p class="section-label">📊 Diese Woche (Trainingsvolumen)</p>
+      <p *ngIf="loadingLeaderboard" class="loading">Wird geladen...</p>
+      <div class="leaderboard-list" *ngIf="!loadingLeaderboard">
+        <div class="leaderboard-row" *ngFor="let entry of leaderboard; let i = index" [class.me]="entry.isMe">
+          <span class="rank">{{ i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i + 1) + '.' }}</span>
+          <span class="lb-name">{{ entry.isMe ? 'Du' : entry.name }}</span>
+          <span class="lb-volume">{{ entry.volume | number:'1.0-0' }} kg</span>
+        </div>
+      </div>
+    </div>
+
     <!-- Eigener Code -->
     <div class="invite-section">
       <p class="panel-desc">Dein Einladungscode:</p>

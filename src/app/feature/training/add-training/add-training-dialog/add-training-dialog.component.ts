@@ -64,6 +64,8 @@ export class AddTrainingDialogComponent implements OnInit, OnDestroy {
 
   selectedStrengthExercise: string = this.builtInStrengthExercises[0].id;
   kg = 0; wdh = 0; saetze = 0;
+  rpe: number | null = null;
+  readonly rpeScale = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   selectedCardioExercise: string = this.builtInCardioExercises[0].id;
   dauer = 0; distanz = 0;
@@ -161,7 +163,7 @@ export class AddTrainingDialogComponent implements OnInit, OnDestroy {
         if (!this.kg || !this.wdh || !this.saetze) { this.error = 'Bitte alle Felder ausfüllen.'; return; }
         const isPR = await this.checkIfPR(this.selectedStrengthExercise, this.kg);
         await this.trainingService.addStrengthTraining(
-          this.selectedStrengthExercise, this.kg, this.wdh, this.saetze, this.notes
+          this.selectedStrengthExercise, this.kg, this.wdh, this.saetze, this.notes, this.rpe ?? undefined
         );
         if (isPR) {
           this.firePRConfetti();

@@ -1,6 +1,18 @@
 # Current Handoff
 
-**From:** DevOps/SRE (session 9 — nav/burger redesign + full profile page)
+**From:** DevOps/SRE (session 10 — RPE + calorie logging + friends leaderboard)
+**To:** User
+
+Built and verified (69/69 tests, production build clean) but **not deployed yet**: `firebase deploy --only firestore` (new `calorieLogs` rule — private, owner-only) then `firebase deploy --only hosting`.
+
+Three features from the brainstorm you picked:
+1. **RPE-Tracking** — when logging a strength set, an optional 1-10 RPE scale now appears; it shows as a small badge on the dashboard card if set.
+2. **Kalorien-Logging** — new "🔥 Kalorien eintragen" option in the long-press add-menu (kcal + optional protein/carbs/fat + note). Dashboard now shows a progress bar of today's logged calories against your profile's calorie goal (the one you set up in session 9) — if no goal is set yet, it links to `/profile` instead.
+3. **Freunde-Wochenvergleich** — in the profile bottom-sheet's "Freunde" panel, above the invite code, a leaderboard now shows this week's strength-training volume for you and each friend, ranked with medals for the top 3.
+
+## History
+
+### DevOps/SRE (session 9 — nav/burger redesign + full profile page)
 **To:** User
 
 Deployed — `firebase deploy --only hosting` ran clean, live at https://fitnesstracker-d54a5.web.app (no Firestore rule changes needed — reuses the existing `userProfiles` owner-write rule for the new fields).

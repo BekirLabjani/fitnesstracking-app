@@ -34,3 +34,25 @@ export function calculateBmr({ gender, age, heightCm, weightKg }: BmrInput): num
 export function calculateTdee(input: BmrInput, activityLevel: ActivityLevel): number {
   return Math.round(calculateBmr(input) * ACTIVITY_MULTIPLIERS[activityLevel]);
 }
+
+export interface CalorieGoalProfile {
+  calorieMode?: 'auto' | 'manual';
+  manualCalories?: number;
+  gender?: Gender;
+  age?: number;
+  heightCm?: number;
+  weightKg?: number;
+  activityLevel?: ActivityLevel;
+}
+
+/**
+ * The calorie target to show the user: their manual value if they set one,
+ * otherwise the calculated TDEE if enough body data is present, else null
+ * (not enough information yet — caller should point to the profile page).
+ */
+export function getEffectiveCalorieGoal(profile: CalorieGoalProfile): number | null {
+  if (profile.calorieMode === 'manual') return profile.manualCalories ?? null;
+  const { gender, age, heightCm, weightKg, activityLevel } = profile;
+  if (!gender || !age || !heightCm || !weightKg || !activityLevel) return null;
+  return calculateTdee({ gender, age, heightCm, weightKg }, activityLevel);
+}

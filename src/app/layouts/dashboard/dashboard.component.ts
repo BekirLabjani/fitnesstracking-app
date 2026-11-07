@@ -1,5 +1,7 @@
 import { Component, OnInit, OnDestroy, inject, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { NavBottomComponent } from '../../shared/nav-bottom/nav-bottom.component';
 import { ProfileComponent } from '../profile/profile.component';
@@ -9,6 +11,10 @@ import { TrainingService, TrainingEntry } from '../training/service/training.ser
 import { ToastService } from '../../shared/toast/toast.service';
 import { resolveExerciseName } from '../../data/exercise.data';
 import { CustomExerciseService, CustomExercise } from '../../data/custom-exercise.service';
+import { CalorieLogService } from '../../shared/calorie/calorie-log.service';
+import { UserProfileService } from '../../shared/services/user-profile.service';
+import { getEffectiveCalorieGoal } from '../../shared/calorie/calorie-calculator';
+import { AddCalorieDialogComponent } from '../../feature/calorie/add-calorie-dialog/add-calorie-dialog.component';
 import { Subscription } from 'rxjs';
 
 interface DashboardCard {
@@ -24,7 +30,7 @@ interface PR { exerciseName: string; weight: number; }
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, NavBottomComponent,
+  imports: [CommonModule, RouterLink, HeaderComponent, NavBottomComponent,
     ProfileComponent, SkeletonComponent, RestTimerComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
@@ -32,9 +38,14 @@ interface PR { exerciseName: string; weight: number; }
 export class DashboardComponent implements OnInit, OnDestroy {
   private trainingService = inject(TrainingService);
   private customExerciseService = inject(CustomExerciseService);
+  private calorieLogService = inject(CalorieLogService);
+  private userProfileService = inject(UserProfileService);
+  private dialog = inject(MatDialog);
   private toast = inject(ToastService);
   private sub?: Subscription;
   private customExercisesSub?: Subscription;
+  private calorieSub?: Subscription;
+  private profileSub?: Subscription;
   private allTrainings: TrainingEntry[] = [];
   private customExercises: CustomExercise[] = [];
 
@@ -44,6 +55,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   topPRs: PR[] = [];
   streak = 0;
   today = new Date().toISOString().split('T')[0];
+
+  // ── Kalorien heute ──────────────────────────────────
+  kcalToday = 0;
+  calorieGoal: number | null = null;
 
   // Pull-to-Refresh
   refreshing = false;
@@ -61,11 +76,28 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.customExercises = list;
       this.buildCards(this.allTrainings);
     });
+    this.calorieSub = this.calorieLogService.getAllEntries().subscribe(entries => {
+      this.kcalToday = entries.filter(e => e.date === this.today).reduce((sum, e) => sum + e.kcal, 0);
+    });
+    this.profileSub = this.userProfileService.profile$.subscribe(profile => {
+      this.calorieGoal = getEffectiveCalorieGoal(profile);
+    });
   }
 
   ngOnDestroy() {
     this.sub?.unsubscribe();
     this.customExercisesSub?.unsubscribe();
+    this.calorieSub?.unsubscribe();
+    this.profileSub?.unsubscribe();
+  }
+
+  get calorieProgress(): number {
+    if (!this.calorieGoal) return 0;
+    return Math.min(100, Math.round((this.kcalToday / this.calorieGoal) * 100));
+  }
+
+  openAddCalorieDialog() {
+    this.dialog.open(AddCalorieDialogComponent, { height: '460px', width: '600px' });
   }
 
   private buildCards(all: TrainingEntry[]) {

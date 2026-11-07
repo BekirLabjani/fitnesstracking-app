@@ -63,6 +63,22 @@
           Hinzufügen
         </button>
       </div>
+
+      <!-- RPE (optional) -->
+      <div class="rpe-section">
+        <span class="rpe-label">RPE (optional) <span class="rpe-hint" *ngIf="rpe !== null">— {{ rpe }}/10</span></span>
+        <div class="rpe-scale">
+          <button
+            type="button"
+            class="rpe-chip"
+            *ngFor="let val of rpeScale"
+            [class.active]="rpe === val"
+            (click)="rpe = rpe === val ? null : val"
+          >
+            {{ val }}
+          </button>
+        </div>
+      </div>
     </ng-container>
 
     <!-- CARDIO -->
