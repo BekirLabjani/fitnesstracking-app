@@ -1,5 +1,10 @@
 # Architect — Cross-Cutting Notes
 
+Active features: premium-tier (session 6)
+
+## premium-tier
+New `entitlements/{userId}` collection, deliberately separate from `userProfiles` for write-permission reasons (see ADR-001). `PremiumService` is the single read path — feature components never read `entitlements` directly. See `premium-tier.md`.
+
 ## Observations [DISCOVERED]
 - Standalone Angular 17 components, lazy-loaded routes, `authGuard` on protected routes — solid modern baseline.
 - `TrainingService` stores all training types (`strength`/`cardio`/`body`) in one `trainings` collection filtered by Firestore `where` clauses client-side; queries use compound `where(userId)+where(type)+where(exerciseId)` without visible composite indexes beyond the near-empty `firestore.indexes.json` (46 bytes) — likely to hit "missing index" errors as usage grows.

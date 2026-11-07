@@ -1,6 +1,15 @@
 # Current Handoff
 
-**From:** DevOps Engineer (session 5 — infra foundations)
+**From:** Engineering Manager / Senior Engineer (session 6 — premium-tier planning)
+**To:** SDE (self, continuing this session)
+
+Planning complete for `premium-tier`: spec at `.10x/specs/2026-11-07-premium-tier-design.md`, ADR-001 (entitlement model — `entitlements/{userId}` Firestore collection, read-only from the client, see ADR for the privilege-escalation reasoning that ruled out putting the flag in `userProfiles`), decisions written for CTO/PM/Architect/Staff-Engineer/EM/Senior-Engineer. Task order: (1) entitlement infra — rules + `PremiumService` + `premiumGuard`, (2) `/upgrade` page, (3) Pro stats tab, (4) CSV export, (5) workout templates, (6) specs, (7) build/test verification, (8) deploy (with user confirmation, same as this session's established pattern).
+
+Next: implement task 1, which blocks 2-5.
+
+## History
+
+### DevOps Engineer (session 5 — infra foundations)
 **To:** User
 
 Implemented all 4 infra items the user approved: Firebase Emulator Suite

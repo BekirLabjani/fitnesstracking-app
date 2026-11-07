@@ -1,6 +1,6 @@
 # Project Status
 
-**Phase:** Hardening Complete + Infra Foundations
+**Phase:** Premium-Tier — Planning Complete, Implementation Starting
 **Date:** 2026-11-07
 
 ## Task Progress
@@ -23,6 +23,8 @@
 - [x] Senior-engineer pass (session 3): fixed another missing Firestore rule (`trainingPlans` — same bug class as Friends, caught by a project-wide collection grep this time), DI consistency in `trainingsplan.component.ts`, removed debug `console.log`, fixed toast id collision, added missing `trainingsplan` spec
 - [x] Free-tier features (session 4): progression suggestions in add-training dialog; custom exercises (new `customExercises` collection + service, wired into add dialog, strength/cardio pickers, dashboard, trainingsplan). Known gap: friends' custom exercises don't resolve to a name in the friend-comparison view (flagged, not fixed — needs a permission-model decision)
 - [x] Infra foundations (session 5): Firebase Emulator Suite for local dev (was sharing live prod project with no isolation — fixed), GitHub Actions PR-preview deploys, GitHub Actions auto-deploy-to-prod on merge to `main` (gated by tests), GCP billing-alert instructions handed to user (manual, can't be done from repo). Needs `FIREBASE_SERVICE_ACCOUNT` GitHub secret + a push to `origin/main` before the new workflows actually run.
+
+- [ ] Premium tier (session 6): spec + ADR-001 (entitlement model) + CTO/PM/Architect/Staff-Engineer/EM/Senior-Engineer decisions written. Implementation (entitlement infra, advanced stats, CSV export, workout templates) starting next.
 
 ## Notes
 `node_modules` had never been installed in this project before this session, and the test suite had apparently never been run — all 25 specs were untouched Angular CLI scaffolds, 17 of them actually broken.
