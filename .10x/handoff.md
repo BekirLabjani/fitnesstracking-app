@@ -3,7 +3,7 @@
 **From:** DevOps/SRE (session 10 — RPE + calorie logging + friends leaderboard)
 **To:** User
 
-Built and verified (69/69 tests, production build clean) but **not deployed yet**: `firebase deploy --only firestore` (new `calorieLogs` rule — private, owner-only) then `firebase deploy --only hosting`.
+Deployed — `firebase deploy --only firestore,hosting` ran clean, live at https://fitnesstracker-d54a5.web.app.
 
 Three features from the brainstorm you picked:
 1. **RPE-Tracking** — when logging a strength set, an optional 1-10 RPE scale now appears; it shows as a small badge on the dashboard card if set.
