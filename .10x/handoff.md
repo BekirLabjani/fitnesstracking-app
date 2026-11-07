@@ -1,6 +1,53 @@
 # Current Handoff
 
-**From:** DevOps/SRE (session 10 — RPE + calorie logging + friends leaderboard)
+**From:** DevOps Engineer (session 11 — ops-hardening / "perfect the app" pass)
+**To:** User
+
+You asked me to look at the app and say how to perfect it, then to do all
+4 points I found. Done, but **one needs your action before it's actually
+live**:
+
+1. **The CI/CD pipeline had never run.** `main` was 25 commits ahead of
+   `origin/main` since session 5 — every past "Deployed" was a local
+   `firebase deploy`, never through GitHub Actions. I pushed it
+   (`54b3417`, then `bbe4742` with the items below). Result: **CI passed**
+   (build+test is sound), but **the production-deploy workflow failed**.
+   I can't read why — the repo's Actions logs need a GitHub login, and
+   there's no `gh` CLI in this environment. Most likely cause: the
+   `FIREBASE_SERVICE_ACCOUNT` secret from session 5 was flagged as
+   needed then and may never have actually been added.
+   **→ Please open https://github.com/BekirLabjani/fitnesstracking-app/actions,
+   open the failed "Deploy to Firebase Hosting (production)" run, expand
+   the failing step, and tell me what it says** (or just add/regenerate
+   the secret yourself: Firebase Console → Project Settings → Service
+   accounts → Generate new private key → GitHub repo secret
+   `FIREBASE_SERVICE_ACCOUNT`). Until then every future push will keep
+   passing CI but failing to deploy — loudly, not silently.
+2. **CSP switched from Report-Only to enforcing.** It ran unchanged
+   across 5+ sessions with nothing flagged, and nothing new in this
+   change needed a new allowed domain. I couldn't test a real login in a
+   browser from here — once this deploys, please log in once for real
+   and check the browser console for any CSP violation errors. One-line
+   revert if something's blocked.
+3. **Firestore indexes checked — already fine.** An old note said they
+   were incomplete; re-checked every query in the codebase against
+   `firestore.indexes.json` and they're all covered. No change needed,
+   corrected the stale note so it doesn't get "fixed" again.
+4. **Added crash/perf visibility**: uncaught errors now get logged to a
+   new `errorLogs` collection (own-only, same pattern as `calorieLogs`)
+   so you'd see a crash without a user telling you; added Firebase
+   Performance Monitoring (prod-only). Deliberately did **not** add
+   Firebase Analytics even though its ID is already in the config — it
+   would've needed loosening the CSP right after enforcing it, plus a
+   GDPR consent-banner question for an EU app with no banner. Said no on
+   purpose, flagging in case you want it anyway.
+
+Build clean, 72/72 tests passing (3 new). Full detail in
+`.10x/decisions/devops/ops-hardening.md`.
+
+## History
+
+### DevOps/SRE (session 10 — RPE + calorie logging + friends leaderboard)
 **To:** User
 
 Deployed — `firebase deploy --only firestore,hosting` ran clean, live at https://fitnesstracker-d54a5.web.app.

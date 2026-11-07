@@ -1,6 +1,15 @@
 # DevOps — Cross-Cutting Notes
 
-Active features: rpe-calorie-leaderboard (session 10), premium-camera-tracking (session 8), premium-tier (session 6), infra-foundations (session 5)
+Active features: ops-hardening (session 11), rpe-calorie-leaderboard (session 10), premium-camera-tracking (session 8), premium-tier (session 6), infra-foundations (session 5)
+
+## ops-hardening (session 11)
+User asked for a general "how to perfect it" devops pass. Found the
+pipeline built in session 5 had never actually run (25 unpushed commits) —
+pushed it, CI passed, **deploy failed** (likely the `FIREBASE_SERVICE_ACCOUNT`
+secret, unconfirmed — needs the user to read the Actions log, no `gh` CLI
+here). Also: flipped CSP to enforcing, added `errorLogs` collection +
+global error handler + Performance Monitoring, verified (not fixed —
+no gap existed) Firestore composite indexes. See `ops-hardening.md`.
 
 ## rpe-calorie-leaderboard (session 10)
 One new Firestore collection (`calorieLogs`, owner-only, no friend-read) needs a rules deploy before hosting. RPE and the friends leaderboard are purely additive — reuse the existing `trainings`/`friends` rules, no deploy ordering concern there. Deploy order: `firestore` then `hosting` (same reasoning as premium-tier — avoid the new UI querying a collection with no rule yet).
