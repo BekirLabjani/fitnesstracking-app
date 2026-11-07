@@ -8,7 +8,7 @@ Two changes, both built and verified (45/45 tests, production build clean) but *
 1. **PDF export replaced CSV export** in Settings (same location, just downloads a `.pdf` now instead of `.csv`).
 2. **New Premium feature: camera rep counter** at `/training/camera-tracker` (linked from the Settings premium row and from the Pro stats tab). Hold the phone so the camera sees your whole upper body/arm side-on, it counts push-ups automatically and lets you save the count as a real training entry. Runs entirely on-device (`@mediapipe/tasks-vision`) — no video leaves the phone, only a one-time model/runtime download from Google's CDN on first use. See ADR-002 for why.
 
-**Deploy** (same pattern as every deploy this session — needs your go-ahead first): `firebase deploy --only hosting` is enough this time, no Firestore rule changes.
+**Deployed** — `firebase deploy --only hosting` ran clean, live at https://fitnesstracker-d54a5.web.app.
 
 Manual QA still needed on a real phone after deploy (can't script a real camera from here): see the 5-step checklist in `.10x/decisions/qa/premium-camera-tracking.md` — in particular, whether the push-up angle thresholds (90°/150°) actually match real reps, since they were tuned on paper, not against real camera footage.
 

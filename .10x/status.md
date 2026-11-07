@@ -1,6 +1,6 @@
 # Project Status
 
-**Phase:** Premium-Camera-Tracking — Implementation Complete, Pending Deploy
+**Phase:** Premium-Camera-Tracking — Deployed to Production
 **Date:** 2026-11-07
 
 ## Task Progress
@@ -26,7 +26,7 @@
 
 - [x] Premium tier (session 6): spec + ADR-001 (entitlement model: `entitlements/{userId}`, read-only from client) + full decision trail (CTO/PM/Architect/Staff-Engineer/EM/Senior-Engineer/QA/Security/DevOps/SRE). Built: `PremiumService`+`premiumGuard`, `/upgrade` pricing page, Pro stats tab (volume trend, muscle-group breakdown, per-exercise progress), CSV export in Settings, workout-templates library (`/trainingsplan/templates`). 37/37 tests passing (9 new), production build clean. **Deployed** (session 7): `firestore` rules + `hosting` both live in production. User manually granted themselves premium via `entitlements/<uid> = {isPremium: true}` in the Firebase Console before deploy.
 
-- [x] Premium camera-tracking (session 8): PDF export replaced CSV export in Settings (`jspdf`/`jspdf-autotable`). New Premium feature `/training/camera-tracker` — on-device push-up rep counter using `@mediapipe/tasks-vision` pose landmarks (ADR-002), pure `PoseRepCounter` state machine, "Als Training speichern" writes a real `pushups` training entry. 45/45 tests passing (8 new), production build clean. **Not yet deployed.**
+- [x] Premium camera-tracking (session 8): PDF export replaced CSV export in Settings (`jspdf`/`jspdf-autotable`). New Premium feature `/training/camera-tracker` — on-device push-up rep counter using `@mediapipe/tasks-vision` pose landmarks (ADR-002), pure `PoseRepCounter` state machine, "Als Training speichern" writes a real `pushups` training entry. 45/45 tests passing (8 new), production build clean. **Deployed** (session 8): `hosting` live in production.
 
 ## Notes
 `node_modules` had never been installed in this project before this session, and the test suite had apparently never been run — all 25 specs were untouched Angular CLI scaffolds, 17 of them actually broken.
