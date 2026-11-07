@@ -16,15 +16,15 @@ describe('ExportService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('triggers a CSV download without throwing for an empty list', () => {
-    expect(() => service.exportTrainingsCsv([])).not.toThrow();
+  it('triggers a PDF download without throwing for an empty list', () => {
+    expect(() => service.exportTrainingsPdf([])).not.toThrow();
   });
 
-  it('triggers a CSV download without throwing for populated entries', () => {
+  it('triggers a PDF download without throwing for populated entries', () => {
     const entries: TrainingEntry[] = [
       { userId: 'u1', type: 'strength', exerciseId: 'bench_press', date: '2026-01-01', weight: 80, reps: 8, sets: 3 },
       { userId: 'u1', type: 'body', date: '2026-01-02', bodyWeight: 82.5 },
     ];
-    expect(() => service.exportTrainingsCsv(entries)).not.toThrow();
+    expect(() => service.exportTrainingsPdf(entries)).not.toThrow();
   });
 });

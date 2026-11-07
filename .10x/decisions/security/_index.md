@@ -1,6 +1,7 @@
 # Security — Cross-Cutting Notes
 
 ## Active Features
+- `premium-camera-tracking` (session 8) — on-device-only pose detection (no video leaves the device), reuses the existing `premiumGuard`/`entitlements` authorization model, no new write surface. See `premium-camera-tracking.md` and ADR-002.
 - `premium-tier` (session 6) — new `entitlements/{userId}` collection, read-only from client, no self-upgrade path (verified by grep — no write calls exist). See `premium-tier.md` and ADR-001 for the rejected client-writable alternative and the accepted UI-only-gating risk.
 - `friends-feature` — [DISCOVERED] Firestore rules gap, status: flagged
 

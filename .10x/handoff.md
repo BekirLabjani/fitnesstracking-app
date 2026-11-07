@@ -1,18 +1,24 @@
 # Current Handoff
 
-**From:** DevOps/SRE (session 7 — premium-tier deploy)
+**From:** DevOps/SRE (session 8 — premium-camera-tracking)
 **To:** User
 
-`premium-tier` is deployed to production: `firebase deploy --only firestore` (new `entitlements` rule) and `firebase deploy --only hosting` both ran clean. Live at https://fitnesstracker-d54a5.web.app. User granted themselves premium (`entitlements/<uid> = {isPremium: true}`, email `Business.life.bekir@gmail.com`) via the Firebase Console before the deploy.
+Two changes, both built and verified (45/45 tests, production build clean) but **not deployed yet**:
 
-What was built: `/upgrade` pricing page (monthly/lifetime, mailto CTA — no real checkout yet, see ADR-001 for why), a new "Pro" tab in Training with 3 charts (volume trend, muscle groups, per-exercise progress), CSV export in Settings, and a workout-templates library at `/trainingsplan/templates` (4 predefined plans: PPL, Ganzkörper 3x, 5x5, Anfänger-Fullbody). All three gated the same way: not-premium users see an upsell/lock pointing to `/upgrade` instead of being blocked outright.
+1. **PDF export replaced CSV export** in Settings (same location, just downloads a `.pdf` now instead of `.csv`).
+2. **New Premium feature: camera rep counter** at `/training/camera-tracker` (linked from the Settings premium row and from the Pro stats tab). Hold the phone so the camera sees your whole upper body/arm side-on, it counts push-ups automatically and lets you save the count as a real training entry. Runs entirely on-device (`@mediapipe/tasks-vision`) — no video leaves the phone, only a one-time model/runtime download from Google's CDN on first use. See ADR-002 for why.
 
-Manual QA still needed (not something I can click through myself): see the 4-step checklist in `.10x/decisions/qa/premium-tier.md` — confirm all three premium surfaces actually render on the live site now that premium is granted, not just in the dev build.
+**Deploy** (same pattern as every deploy this session — needs your go-ahead first): `firebase deploy --only hosting` is enough this time, no Firestore rule changes.
+
+Manual QA still needed on a real phone after deploy (can't script a real camera from here): see the 5-step checklist in `.10x/decisions/qa/premium-camera-tracking.md` — in particular, whether the push-up angle thresholds (90°/150°) actually match real reps, since they were tuned on paper, not against real camera footage.
 
 ## History
 
+### DevOps/SRE (session 7 — premium-tier deploy)
+Deployed `premium-tier`: `firestore` rules + `hosting` both live in production. User granted themselves premium (`entitlements/<uid> = {isPremium: true}`, email `Business.life.bekir@gmail.com`) via the Firebase Console before the deploy.
+
 ### DevOps/SRE (session 6 — premium-tier delivery)
-Built and verified premium-tier (37/37 tests, production build clean), not yet deployed at that point. Deployed in session 7 (see Current Handoff above).
+Built and verified premium-tier (37/37 tests, production build clean), not yet deployed at that point. Deployed in session 7.
 
 ### DevOps Engineer (session 5 — infra foundations)
 **To:** User

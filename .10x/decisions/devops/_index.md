@@ -1,6 +1,9 @@
 # DevOps — Cross-Cutting Notes
 
-Active features: premium-tier (session 6), infra-foundations (session 5)
+Active features: premium-camera-tracking (session 8), premium-tier (session 6), infra-foundations (session 5)
+
+## premium-camera-tracking (session 8)
+Hosting-only deploy, no new rules. New npm dependency `@mediapipe/tasks-vision`, lazy-loaded so it only costs bundle size for users who open the camera-tracker route. See `premium-camera-tracking.md` and ADR-002.
 
 ## premium-tier (session 6)
 No new infra. Deploy order: firestore rules then hosting. Manual premium-grant workflow documented in `premium-tier.md` (this is the actual delivery mechanism this iteration, since there's no payment backend yet).

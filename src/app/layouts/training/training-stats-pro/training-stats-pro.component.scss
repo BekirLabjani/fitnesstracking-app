@@ -47,6 +47,23 @@
 
 .upsell-icon { font-size: 32px; }
 
+.camera-cta {
+  text-align: center;
+
+  p { margin: 0 0 12px; color: var(--text-2); font-size: 13px; }
+}
+
+.camera-cta-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: var(--radius-s);
+  background: var(--accent);
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+}
+
 .upsell-cta {
   margin-top: 10px;
   display: inline-block;

@@ -43,6 +43,11 @@ export const routes: Routes = [
     canActivate: [authGuard, premiumGuard],
   },
   {
+    path: 'training/camera-tracker',
+    loadComponent: () => import('./layouts/training/camera-tracker/camera-tracker.component').then(m => m.CameraTrackerComponent),
+    canActivate: [authGuard, premiumGuard],
+  },
+  {
     path: 'upgrade',
     loadComponent: () => import('./layouts/upgrade/upgrade.component').then(m => m.UpgradeComponent),
     canActivate: [authGuard],

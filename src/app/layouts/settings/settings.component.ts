@@ -40,12 +40,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.customExercisesSub?.unsubscribe();
   }
 
-  exportCsv() {
+  exportPdf() {
     if (this.allTrainings.length === 0) {
       this.toast.error('Keine Trainingsdaten zum Exportieren vorhanden');
       return;
     }
-    this.exportService.exportTrainingsCsv(this.allTrainings, this.customExercises);
+    this.exportService.exportTrainingsPdf(this.allTrainings, this.customExercises);
     this.toast.success('Export gestartet');
   }
 }

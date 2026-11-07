@@ -28,15 +28,25 @@
     </div>
 
     <ng-container *ngIf="premium.isPremium$ | async; else exportLocked">
-      <div class="settings-item" (click)="exportCsv()">
+      <div class="settings-item" (click)="exportPdf()">
         <span class="settings-icon">⬇️</span>
-        <span>Trainingsdaten exportieren (CSV)</span>
+        <span>Trainingsdaten exportieren (PDF)</span>
+      </div>
+      <div class="settings-item" routerLink="/training/camera-tracker">
+        <span class="settings-icon">🎥</span>
+        <span>Kamera-Wiederholungszähler</span>
+        <span class="badge go">→</span>
       </div>
     </ng-container>
     <ng-template #exportLocked>
       <div class="settings-item" routerLink="/upgrade">
         <span class="settings-icon">⬇️</span>
-        <span>Trainingsdaten exportieren (CSV)</span>
+        <span>Trainingsdaten exportieren (PDF)</span>
+        <span class="badge soon">⭐ Premium</span>
+      </div>
+      <div class="settings-item" routerLink="/upgrade">
+        <span class="settings-icon">🎥</span>
+        <span>Kamera-Wiederholungszähler</span>
         <span class="badge soon">⭐ Premium</span>
       </div>
     </ng-template>

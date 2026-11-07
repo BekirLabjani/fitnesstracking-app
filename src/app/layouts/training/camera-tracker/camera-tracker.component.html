@@ -1,0 +1,52 @@
+<div class="camera-tracker-page">
+  <div class="header">
+    <button class="back-btn" routerLink="/training">← Zurück</button>
+    <h1>Kamera-Wiederholungszähler</h1>
+  </div>
+
+  <ng-container *ngIf="premium.isPremium$ | async; else upsell">
+
+    <p class="hint">
+      🏋️ Liegestütze zählen. Lege dein Handy seitlich hin, sodass Oberkörper und Arm
+      komplett im Bild sind — die Erkennung läuft komplett auf deinem Gerät, kein Video
+      verlässt dein Handy.
+    </p>
+
+    <div class="camera-view">
+      <video #video class="camera-video" muted playsinline></video>
+      <canvas #canvas class="camera-canvas"></canvas>
+      <div class="rep-badge" *ngIf="status === 'tracking' || reps > 0">{{ reps }}</div>
+    </div>
+
+    <p class="error" *ngIf="status === 'error'">{{ errorMessage }}</p>
+
+    <div class="controls">
+      <button
+        class="primary-btn"
+        *ngIf="status === 'idle' || status === 'error'"
+        (click)="start()"
+      >
+        🎥 Kamera starten
+      </button>
+      <button class="primary-btn" disabled *ngIf="status === 'starting'">Wird gestartet…</button>
+      <button class="secondary-btn" *ngIf="status === 'tracking'" (click)="stop()">⏹ Stoppen</button>
+      <button
+        class="save-btn"
+        *ngIf="status === 'idle' && reps > 0"
+        [disabled]="saving"
+        (click)="saveAsTraining()"
+      >
+        ✅ {{ reps }} Liegestütze als Training speichern
+      </button>
+    </div>
+  </ng-container>
+
+  <ng-template #upsell>
+    <div class="upsell-card">
+      <span class="upsell-icon">⭐</span>
+      <h3>Kamera-Wiederholungszähler ist Premium</h3>
+      <p>Zähle Liegestütze automatisch per Kamera — die Analyse läuft komplett auf deinem Gerät.</p>
+      <a class="upsell-cta" routerLink="/upgrade">Jetzt freischalten</a>
+    </div>
+  </ng-template>
+</div>

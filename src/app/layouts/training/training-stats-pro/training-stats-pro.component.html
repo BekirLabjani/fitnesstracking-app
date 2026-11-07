@@ -2,6 +2,12 @@
 
   <ng-container *ngIf="premium.isPremium$ | async; else upsell">
 
+    <div class="section camera-cta">
+      <h3 class="section-title">🎥 Kamera-Wiederholungszähler</h3>
+      <p>Liegestütze automatisch per Kamera zählen lassen — Analyse läuft komplett auf deinem Gerät.</p>
+      <a class="camera-cta-btn" routerLink="/training/camera-tracker">Kamera öffnen</a>
+    </div>
+
     <div class="section" *ngIf="allTrainings.length > 0; else empty">
       <h3 class="section-title">📈 Volumen-Trend (gesamte Historie)</h3>
       <div style="height:200px">

@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import { TrainingEntry } from '../../layouts/training/service/training.service';
 import { resolveExerciseName } from '../../data/exercise.data';
 import { CustomExercise } from '../../data/custom-exercise.service';
 
-const COLUMNS = ['date', 'type', 'exercise', 'weight', 'reps', 'sets', 'duration', 'distance', 'bodyWeight', 'notes'];
+const COLUMNS = ['Datum', 'Art', 'Übung', 'Gewicht', 'Wdh.', 'Sätze', 'Dauer', 'Distanz', 'Körpergewicht', 'Notizen'];
 
 @Injectable({ providedIn: 'root' })
 export class ExportService {
-  exportTrainingsCsv(entries: TrainingEntry[], customExercises: CustomExercise[] = []) {
+  exportTrainingsPdf(entries: TrainingEntry[], customExercises: CustomExercise[] = []) {
     const rows = entries.map(e => [
       e.date,
       e.type,
@@ -20,23 +22,21 @@ export class ExportService {
       e.bodyWeight ?? '',
       e.notes ?? '',
     ]);
-    const csv = [COLUMNS, ...rows]
-      .map(row => row.map(cell => this.escapeCsvCell(String(cell))).join(','))
-      .join('\r\n');
 
-    const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `trainingsdaten-${new Date().toISOString().split('T')[0]}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
-  }
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.text('Trainingsdaten', 14, 16);
+    doc.setFontSize(10);
+    doc.text(`Erstellt am ${new Date().toLocaleDateString('de-DE')} · ${entries.length} Einträge`, 14, 22);
 
-  private escapeCsvCell(value: string): string {
-    if (value.includes(',') || value.includes('"') || value.includes('\n')) {
-      return '"' + value.replace(/"/g, '""') + '"';
-    }
-    return value;
+    autoTable(doc, {
+      head: [COLUMNS],
+      body: rows,
+      startY: 28,
+      styles: { fontSize: 8 },
+      headStyles: { fillColor: [37, 99, 235] },
+    });
+
+    doc.save(`trainingsdaten-${new Date().toISOString().split('T')[0]}.pdf`);
   }
 }
