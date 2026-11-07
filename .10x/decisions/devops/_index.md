@@ -1,8 +1,35 @@
 # DevOps — Cross-Cutting Notes
 
-## Observations [DISCOVERED]
-- No CI/CD pipeline found (no `.github/workflows`, no other CI config). Deploys are presumably manual `ng build` + `firebase deploy`.
-- `node_modules` was absent and `package.json` had `@angular/service-worker@^21.2.15` conflicting with the Angular 17 toolchain — fixed to `^17.0.0` this session; `npm install` and `ng serve` now succeed.
-- `npm audit` reports 99 vulnerabilities (5 critical, 45 high) in the dependency tree — not yet triaged.
-- `firebase.json` hosting config looks reasonable (SPA rewrite, cache headers, basic security headers `X-Frame-Options`/`X-Content-Type-Options`). Missing: `Content-Security-Policy`, `Strict-Transport-Security`.
-- No `.env` / secret separation — Firebase web config is checked into `environment.ts` / `environment.prod.ts`, which is normal for Firebase client keys, but there is no visible separation for a future server-side key if one is ever added.
+Active features: infra-foundations (session 5)
+
+## Observations [DISCOVERED] — status as of session 5
+- ~~No CI/CD pipeline found~~ → `ci.yml` added (session 1-2): build +
+  test on push/PR to `main`. Still true at discovery time, now stale.
+- `node_modules`/service-worker version conflict → fixed session 1.
+- `npm audit`: 99 → 70 vulnerabilities after `npm audit fix`; remaining
+  70 are all dev-only `webpack-dev-server`/`webpack-dev-middleware`,
+  require a breaking `@angular-devkit/build-angular` major bump,
+  deliberately deferred (not forced).
+- ~~Missing `Content-Security-Policy`, `Strict-Transport-Security`~~ →
+  both added (session 2): HSTS enforcing, CSP shipped as
+  `Content-Security-Policy-Report-Only` pending live-login verification
+  before switching to enforcing.
+- No `.env`/secret separation: still accurate, not a real gap — Firebase
+  web config is meant to be public client-side, no server-side secret
+  exists yet in this app.
+
+## infra-foundations (session 5) — see `infra-foundations.md`
+Added: Firebase Emulator Suite for local dev (dev/prod were sharing one
+live Firebase project — biggest gap found), GitHub Actions PR-preview
+deploys, GitHub Actions auto-deploy-to-prod on merge to `main`, and
+handed the user manual instructions for a GCP Billing budget alert
+(can't be done from the repo). Status: implemented and build/test
+verified; both new workflows need a `FIREBASE_SERVICE_ACCOUNT` GitHub
+secret added by the user before they can actually deploy.
+
+## Cross-cutting principle
+When a `[DISCOVERED]` note says something is missing, verify against
+current code before relying on it — this file had gone stale (CSP/HSTS/
+CI items were already fixed in later sessions but the note here still
+said "missing"/"not found"). Update this file whenever a past
+`[DISCOVERED]` item gets addressed, don't just add new entries on top.

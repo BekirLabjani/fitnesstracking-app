@@ -1,9 +1,26 @@
 # Current Handoff
 
-**From:** Senior Engineer (session 3 code review)
-**To:** User / next session
+**From:** DevOps Engineer (session 5 — infra foundations)
+**To:** User
 
-Fixed everything found in this pass (see `.10x/decisions/senior-engineer/_index.md`): a second missing-Firestore-rule bug (`trainingPlans`, same class as the earlier Friends bug), a leftover `getFirestore()` call, a debug `console.log`, a toast-id collision bug, and a missing spec file. Build + all 26 tests verified green. Not pushed to remote.
+Implemented all 4 infra items the user approved: Firebase Emulator Suite
+for local dev (dev no longer shares the live prod Firebase project),
+GitHub Actions PR-preview deploys, GitHub Actions auto-deploy-to-prod on
+merge to `main` (tests gate the deploy), and billing-alert setup
+instructions (manual, GCP Console — can't be done from here). Full
+details in `.10x/decisions/devops/infra-foundations.md`. Build
+(`ng build --configuration production`) and full test suite (28/28)
+verified green after the change.
+
+**Action needed from the user before the new workflows do anything:**
+1. Add a `FIREBASE_SERVICE_ACCOUNT` secret to the GitHub repo (Firebase
+   Console → Project Settings → Service accounts → Generate new private
+   key, paste the JSON as the secret value — or run
+   `firebase init hosting:github` which sets this up automatically).
+2. Push the local commits to `origin/main` — none of this runs on a
+   local-only branch.
+3. Set up the GCP Billing budget alert manually (Cloud Console → Billing
+   → Budgets & alerts) — scoped to `fitnesstracker-d54a5`.
 
 Still open from earlier sessions:
 - CSP is live in `firebase.json` as `Content-Security-Policy-Report-Only` — needs a real deploy + live login/sync/avatar-upload test, then switch to enforcing (drop `-Report-Only` from the header key) once the browser console shows no violations.
@@ -11,6 +28,9 @@ Still open from earlier sessions:
 - Not-yet-reviewed files listed at the bottom of `.10x/decisions/senior-engineer/_index.md`.
 
 ## History
+
+### Senior Engineer (session 3 code review)
+Fixed a second missing-Firestore-rule bug (`trainingPlans`, same class as the earlier Friends bug), a leftover `getFirestore()` call, a debug `console.log`, a toast-id collision bug, and a missing spec file. Build + all 26 tests verified green.
 
 ### Discovery (all roles), 2026-11-06
 Full-codebase review completed on request ("schau dir die App an und sag mir wo man was verbessern könnte"). No implementation was requested yet — findings presented in chat, organized by role lens (Security, Architecture/Data, DevOps, QA).

@@ -31,6 +31,9 @@ yarn-error.log
 # Firebase CLI local deploy cache (hashes of last-deployed hosting files)
 /.firebase
 
+# Firebase Emulator Suite local data export
+/.emulator-data
+
 # Miscellaneous
 /.angular/cache
 .sass-cache/

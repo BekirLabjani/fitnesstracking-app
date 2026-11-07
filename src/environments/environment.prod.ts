@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
+  useEmulators: false,
   firebase: {
     apiKey: 'AIzaSyBpcXg3A_1XIfa34J5bdvPTkWKtmSG-TyE',
     authDomain: 'fitnesstracker-d54a5.firebaseapp.com',

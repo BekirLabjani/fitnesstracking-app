@@ -1,0 +1,38 @@
+name: Deploy to Firebase Hosting (production)
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build (production)
+        run: npm run build -- --configuration production
+
+      - name: Unit tests
+        run: npm test -- --no-watch --no-progress --browsers=ChromeHeadless
+
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+          projectId: fitnesstracker-d54a5
+          channelId: live
+
+      - name: Deploy Firestore/Storage rules and indexes
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/firebase-sa.json
+        run: |
+          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > "$GOOGLE_APPLICATION_CREDENTIALS"
+          npx firebase-tools deploy --only firestore,storage --project fitnesstracker-d54a5
