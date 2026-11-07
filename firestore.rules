@@ -57,6 +57,16 @@ service cloud.firestore {
       allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
     }
 
+    // Fehler-Log: schreibbar nur create (kein update/delete durch den
+    // Client, damit niemand einen Eintrag nachträglich fälscht), lesbar
+    // nur vom Besitzer selbst (dient nur Debug-Zwecken des Entwicklers,
+    // der über die Firebase Console als Admin ohnehin alles sieht).
+    match /errorLogs/{logId} {
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if false;
+    }
+
     // Premium-Status: nur über die Firebase Console (Admin-SDK, umgeht
     // Rules) änderbar, niemals über die App. Ein client-beschreibbares
     // Premium-Feld wäre eine Privilegieneskalations-Lücke — siehe ADR-001.

@@ -1,4 +1,4 @@
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, ErrorHandler } from '@angular/core';
 import { provideRouter, withPreloading, PreloadAllModules } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideServiceWorker } from '@angular/service-worker';
@@ -7,9 +7,11 @@ import { provideAuth, getAuth, connectAuthEmulator } from '@angular/fire/auth';
 import { provideFirestore } from '@angular/fire/firestore';
 import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, connectFirestoreEmulator } from 'firebase/firestore';
 import { provideStorage, getStorage, connectStorageEmulator } from '@angular/fire/storage';
+import { providePerformance, getPerformance } from '@angular/fire/performance';
 
 import { routes } from './app.routes';
 import { environment } from '../environments/environment';
+import { GlobalErrorHandler } from './shared/error-handling/global-error-handler';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -39,5 +41,8 @@ export const appConfig: ApplicationConfig = {
       if (environment.useEmulators) connectStorageEmulator(storage, '127.0.0.1', 9199);
       return storage;
     }),
+    // Only in production — dev/emulator traffic would just be noise.
+    ...(environment.production ? [providePerformance(() => getPerformance())] : []),
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
   ]
 };
