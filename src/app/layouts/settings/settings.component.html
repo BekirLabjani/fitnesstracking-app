@@ -27,6 +27,26 @@
       <span class="badge go">→</span>
     </div>
 
+    <ng-container *ngIf="premium.isPremium$ | async; else exportLocked">
+      <div class="settings-item" (click)="exportCsv()">
+        <span class="settings-icon">⬇️</span>
+        <span>Trainingsdaten exportieren (CSV)</span>
+      </div>
+    </ng-container>
+    <ng-template #exportLocked>
+      <div class="settings-item" routerLink="/upgrade">
+        <span class="settings-icon">⬇️</span>
+        <span>Trainingsdaten exportieren (CSV)</span>
+        <span class="badge soon">⭐ Premium</span>
+      </div>
+    </ng-template>
+
+    <div class="settings-item" routerLink="/upgrade">
+      <span class="settings-icon">⭐</span>
+      <span>Premium</span>
+      <span class="badge go">→</span>
+    </div>
+
     <div class="settings-item">
       <span class="settings-icon">🌍</span>
       <span>Sprache: Deutsch</span>

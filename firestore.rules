@@ -50,6 +50,14 @@ service cloud.firestore {
       allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
     }
 
+    // Premium-Status: nur über die Firebase Console (Admin-SDK, umgeht
+    // Rules) änderbar, niemals über die App. Ein client-beschreibbares
+    // Premium-Feld wäre eine Privilegieneskalations-Lücke — siehe ADR-001.
+    match /entitlements/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if false;
+    }
+
     // Alles andere ist verboten
     match /{document=**} {
       allow read, write: if false;

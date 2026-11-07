@@ -1,0 +1,42 @@
+<div class="upgrade-page">
+  <div class="upgrade-header">
+    <button class="back-btn" routerLink="/dashboard">← Zurück</button>
+    <h1>Premium</h1>
+  </div>
+
+  <ng-container *ngIf="premium.isPremium$ | async; else offer">
+    <div class="status-card active">
+      <span class="status-icon">✓</span>
+      <div>
+        <strong>Du bist Premium</strong>
+        <p>Alle erweiterten Funktionen sind freigeschaltet.</p>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #offer>
+    <p class="intro">Hol dir tiefere Einblicke in dein Training, deine Daten zum Mitnehmen und fertige Trainingspläne von Experten.</p>
+
+    <div class="features">
+      <div class="feature"><span>📊</span> Erweiterte Statistiken (Volumen-Trend, Muskelgruppen, Fortschritt pro Übung)</div>
+      <div class="feature"><span>⬇️</span> Trainingsdaten als CSV exportieren</div>
+      <div class="feature"><span>📋</span> Workout-Vorlagen-Bibliothek (PPL, 5x5, Ganzkörper &amp; mehr)</div>
+    </div>
+
+    <div class="plans">
+      <div class="plan-card">
+        <div class="plan-name">Monatlich</div>
+        <div class="plan-price">4,99&nbsp;€<span>/Monat</span></div>
+        <a class="cta" [href]="requestMailtoHref">Freischaltung anfragen</a>
+      </div>
+      <div class="plan-card highlight">
+        <div class="plan-badge">Beliebt</div>
+        <div class="plan-name">Lifetime</div>
+        <div class="plan-price">39,99&nbsp;€<span>einmalig</span></div>
+        <a class="cta" [href]="requestMailtoHref">Freischaltung anfragen</a>
+      </div>
+    </div>
+
+    <p class="note">Noch kein automatischer Checkout — nach der Anfrage wird dein Account manuell freigeschaltet.</p>
+  </ng-template>
+</div>

@@ -1,0 +1,44 @@
+<div class="stats-pro-page">
+
+  <ng-container *ngIf="premium.isPremium$ | async; else upsell">
+
+    <div class="section" *ngIf="allTrainings.length > 0; else empty">
+      <h3 class="section-title">📈 Volumen-Trend (gesamte Historie)</h3>
+      <div style="height:200px">
+        <canvas baseChart [type]="'line'" [data]="volumeTrendChartData"></canvas>
+      </div>
+    </div>
+
+    <div class="section" *ngIf="allTrainings.length > 0">
+      <h3 class="section-title">💪 Muskelgruppen-Verteilung</h3>
+      <div style="height:200px">
+        <canvas baseChart [type]="'bar'" [data]="muscleGroupChartData"></canvas>
+      </div>
+    </div>
+
+    <div class="section" *ngIf="strengthExerciseOptions.length > 0">
+      <h3 class="section-title">🎯 Fortschritt pro Übung</h3>
+      <select class="exercise-select" [(ngModel)]="selectedExerciseId">
+        <option value="" disabled>Übung wählen</option>
+        <option *ngFor="let ex of strengthExerciseOptions" [value]="ex.id">{{ ex.name }}</option>
+      </select>
+      <div style="height:200px" *ngIf="selectedExerciseId">
+        <canvas baseChart [type]="'line'" [data]="exerciseProgressChartData"></canvas>
+      </div>
+    </div>
+
+    <ng-template #empty>
+      <div class="empty"><p>🏋️ Noch keine Daten. Füge dein erstes Training hinzu!</p></div>
+    </ng-template>
+  </ng-container>
+
+  <ng-template #upsell>
+    <div class="upsell-card">
+      <span class="upsell-icon">⭐</span>
+      <h3>Erweiterte Statistiken sind Premium</h3>
+      <p>Volumen-Trend über deine komplette Historie, Muskelgruppen-Verteilung und Fortschritt pro Übung.</p>
+      <a class="upsell-cta" routerLink="/upgrade">Jetzt freischalten</a>
+    </div>
+  </ng-template>
+
+</div>

@@ -7,6 +7,7 @@ import { TrainingStrengthComponent } from './training-strength/training-strength
 import { TrainingStatsComponent } from './training-stats/training-stats.component';
 import { TrainingCardioComponent } from './training-cardio/training-cardio.component';
 import { TrainingBodyComponent } from './training-body/training-body.component';
+import { TrainingStatsProComponent } from './training-stats-pro/training-stats-pro.component';
 
 @Component({
   selector: 'app-training',
@@ -20,19 +21,20 @@ import { TrainingBodyComponent } from './training-body/training-body.component';
     TrainingStatsComponent,
     TrainingCardioComponent,
     TrainingBodyComponent,
+    TrainingStatsProComponent,
   ],
   templateUrl: './training.component.html',
   styleUrl: './training.component.scss',
 })
 export class TrainingComponent {
-  activeTab: 'strength' | 'cardio' | 'body' | 'stats' = 'strength';
+  activeTab: 'strength' | 'cardio' | 'body' | 'stats' | 'pro' = 'strength';
   isMenuOpen = false;
 
   onMenuToggle(isOpen: boolean) {
     this.isMenuOpen = isOpen;
   }
 
-  onTabChange(tab: 'strength' | 'cardio' | 'body' | 'stats') {
+  onTabChange(tab: 'strength' | 'cardio' | 'body' | 'stats' | 'pro') {
     this.activeTab = tab;
   }
 }

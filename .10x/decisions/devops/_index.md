@@ -1,6 +1,9 @@
 # DevOps — Cross-Cutting Notes
 
-Active features: infra-foundations (session 5)
+Active features: premium-tier (session 6), infra-foundations (session 5)
+
+## premium-tier (session 6)
+No new infra. Deploy order: firestore rules then hosting. Manual premium-grant workflow documented in `premium-tier.md` (this is the actual delivery mechanism this iteration, since there's no payment backend yet).
 
 ## Observations [DISCOVERED] — status as of session 5
 - ~~No CI/CD pipeline found~~ → `ci.yml` added (session 1-2): build +

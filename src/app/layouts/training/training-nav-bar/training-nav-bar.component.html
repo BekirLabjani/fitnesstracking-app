@@ -34,4 +34,13 @@
     Stats
     <span class="underline"></span>
   </button>
+
+   <button
+    class="tab"
+    [class.active]="activeTab === 'pro'"
+    (click)="selectTab('pro')"
+  >
+    Pro ⭐
+    <span class="underline"></span>
+  </button>
 </nav>

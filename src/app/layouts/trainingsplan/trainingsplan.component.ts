@@ -11,6 +11,7 @@ import { Firestore } from '@angular/fire/firestore';
 import { doc, setDoc, onSnapshot } from 'firebase/firestore';
 import { EXERCISES, resolveExerciseName } from '../../data/exercise.data';
 import { CustomExerciseService, CustomExercise } from '../../data/custom-exercise.service';
+import { PremiumService } from '../../shared/premium/premium.service';
 import { Subscription } from 'rxjs';
 
 const DAYS = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
@@ -30,6 +31,7 @@ export class TrainingsplanComponent implements OnInit, OnDestroy {
   private auth = inject(Auth);
   private db = inject(Firestore);
   private customExerciseService = inject(CustomExerciseService);
+  premium = inject(PremiumService);
   private unsub?: () => void;
   private customExercisesSub?: Subscription;
 

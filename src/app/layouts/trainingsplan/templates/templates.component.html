@@ -1,0 +1,21 @@
+<div class="templates-page">
+  <div class="templates-header">
+    <a routerLink="/trainingsplan" class="back-btn">←</a>
+    <h1>Vorlagen</h1>
+  </div>
+
+  <div class="template-list">
+    <div class="template-card" *ngFor="let t of templates">
+      <div class="template-top">
+        <h3>{{ t.name }}</h3>
+        <span class="days-badge">{{ trainingDaysCount(t) }} Tage/Woche</span>
+      </div>
+      <p class="template-desc">{{ t.description }}</p>
+      <div class="exercise-tags">
+        <span class="tag" *ngFor="let name of exerciseNames(t).slice(0, 5)">{{ name }}</span>
+        <span class="tag more" *ngIf="exerciseNames(t).length > 5">+{{ exerciseNames(t).length - 5 }}</span>
+      </div>
+      <button class="apply-btn" (click)="applyTemplate(t)">Übernehmen</button>
+    </div>
+  </div>
+</div>

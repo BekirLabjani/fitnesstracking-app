@@ -1,5 +1,7 @@
 # SDE — What Was Built / Fixed
 
+Active features: premium-tier (session 6) — see `premium-tier.md`.
+
 ## fitness-tracker-hardening (this session)
 Fixed every item from the discovery review, in dependency order:
 

@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './auth/guards/auth.guard';
+import { premiumGuard } from './shared/premium/premium.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -34,6 +35,16 @@ export const routes: Routes = [
   {
     path: 'trainingsplan',
     loadComponent: () => import('./layouts/trainingsplan/trainingsplan.component').then(m => m.TrainingsplanComponent),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'trainingsplan/templates',
+    loadComponent: () => import('./layouts/trainingsplan/templates/templates.component').then(m => m.TemplatesComponent),
+    canActivate: [authGuard, premiumGuard],
+  },
+  {
+    path: 'upgrade',
+    loadComponent: () => import('./layouts/upgrade/upgrade.component').then(m => m.UpgradeComponent),
     canActivate: [authGuard],
   },
   { path: '**', redirectTo: 'login' },

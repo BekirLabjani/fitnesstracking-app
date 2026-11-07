@@ -3,6 +3,9 @@
   <div class="plan-header">
     <a routerLink="/dashboard" class="back-btn">←</a>
     <h1>Trainingsplan</h1>
+    <a class="templates-link" [routerLink]="(premium.isPremium$ | async) ? '/trainingsplan/templates' : '/upgrade'">
+      📋 Vorlagen <span *ngIf="!(premium.isPremium$ | async)">⭐</span>
+    </a>
   </div>
 
   <!-- Wochentage -->

@@ -1,11 +1,16 @@
 # Current Handoff
 
-**From:** Engineering Manager / Senior Engineer (session 6 — premium-tier planning)
-**To:** SDE (self, continuing this session)
+**From:** DevOps/SRE (session 6 — premium-tier delivery)
+**To:** User
 
-Planning complete for `premium-tier`: spec at `.10x/specs/2026-11-07-premium-tier-design.md`, ADR-001 (entitlement model — `entitlements/{userId}` Firestore collection, read-only from the client, see ADR for the privilege-escalation reasoning that ruled out putting the flag in `userProfiles`), decisions written for CTO/PM/Architect/Staff-Engineer/EM/Senior-Engineer. Task order: (1) entitlement infra — rules + `PremiumService` + `premiumGuard`, (2) `/upgrade` page, (3) Pro stats tab, (4) CSV export, (5) workout templates, (6) specs, (7) build/test verification, (8) deploy (with user confirmation, same as this session's established pattern).
+`premium-tier` is fully built and verified (37/37 tests, production build clean) but **not deployed yet**. Two things needed from you:
 
-Next: implement task 1, which blocks 2-5.
+1. **Deploy** (I'll run these with your confirmation, same as this session's other deploys): `firebase deploy --only firestore` (new `entitlements` rule) then `firebase deploy --only hosting` (new routes/components). Say the word and I'll run them.
+2. **To actually grant anyone premium** (including yourself, for testing): Firebase Console → Firestore → create collection `entitlements` → document ID = your Auth UID → field `isPremium: true` (boolean). Full steps in `.10x/decisions/devops/premium-tier.md`.
+
+What was built: `/upgrade` pricing page (monthly/lifetime, mailto CTA — no real checkout yet, see ADR-001 for why), a new "Pro" tab in Training with 3 charts (volume trend, muscle groups, per-exercise progress), CSV export in Settings, and a workout-templates library at `/trainingsplan/templates` (4 predefined plans: PPL, Ganzkörper 3x, 5x5, Anfänger-Fullbody). All three gated the same way: not-premium users see an upsell/lock pointing to `/upgrade` instead of being blocked outright.
+
+Manual QA still needed after deploy (not something I can click through myself): see the 4-step checklist in `.10x/decisions/qa/premium-tier.md`.
 
 ## History
 

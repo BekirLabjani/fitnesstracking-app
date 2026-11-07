@@ -1,6 +1,9 @@
 ---
-Active features: fitness-tracker-hardening (code-quality pass, session 3)
+Active features: premium-tier (session 6), fitness-tracker-hardening (code-quality pass, session 3)
 ---
+
+## premium-tier (session 6)
+See `premium-tier.md` for implementation-approach notes (entitlement infra, stats charts, template overwrite handling).
 
 ## fitness-tracker-hardening — code review findings (this session)
 

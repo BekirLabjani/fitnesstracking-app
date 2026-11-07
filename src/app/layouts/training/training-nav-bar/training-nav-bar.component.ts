@@ -8,11 +8,11 @@ import { Component,EventEmitter, Input,Output } from '@angular/core';
   styleUrl: './training-nav-bar.component.scss'
 })
 export class TrainingNavBarComponent {
-@Input() activeTab!: 'strength' | 'cardio' | 'body' | 'stats';
+@Input() activeTab!: 'strength' | 'cardio' | 'body' | 'stats' | 'pro';
 
-@Output() tabChange = new EventEmitter<'strength' | 'cardio' | 'body' | 'stats'>();
+@Output() tabChange = new EventEmitter<'strength' | 'cardio' | 'body' | 'stats' | 'pro'>();
 
-selectTab(tab: 'strength' | 'cardio' | 'body' | 'stats') {
-  this.tabChange.emit(tab); 
+selectTab(tab: 'strength' | 'cardio' | 'body' | 'stats' | 'pro') {
+  this.tabChange.emit(tab);
 }
 }
