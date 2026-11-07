@@ -1,0 +1,96 @@
+<div class="profile-page-full">
+  <div class="header">
+    <button class="back-btn" routerLink="/dashboard">← Zurück</button>
+    <h1>Profil</h1>
+  </div>
+
+  <form class="profile-form" (ngSubmit)="save()">
+
+    <section class="card">
+      <h2 class="card-title">👤 Account</h2>
+      <label class="field">
+        <span>Anzeigename</span>
+        <input type="text" [(ngModel)]="displayName" name="displayName" placeholder="Dein Name" />
+      </label>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title">📏 Körperdaten</h2>
+
+      <label class="field">
+        <span>Geschlecht</span>
+        <div class="segmented">
+          <button type="button" [class.active]="gender === 'male'" (click)="gender = 'male'">Männlich</button>
+          <button type="button" [class.active]="gender === 'female'" (click)="gender = 'female'">Weiblich</button>
+        </div>
+      </label>
+
+      <div class="field-row">
+        <label class="field">
+          <span>Alter</span>
+          <input type="number" min="1" max="120" [(ngModel)]="age" name="age" placeholder="z.B. 28" />
+        </label>
+        <label class="field">
+          <span>Größe (cm)</span>
+          <input type="number" min="1" max="260" [(ngModel)]="heightCm" name="heightCm" placeholder="z.B. 180" />
+        </label>
+      </div>
+
+      <label class="field">
+        <span>Gewicht (kg)</span>
+        <input type="number" min="1" max="400" step="0.1" [(ngModel)]="weightKg" name="weightKg" placeholder="z.B. 75" />
+      </label>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title">🏃 Wie oft bewegst du dich?</h2>
+      <div class="activity-list">
+        <button
+          type="button"
+          class="activity-option"
+          *ngFor="let opt of activityOptions"
+          [class.active]="activityLevel === opt.value"
+          (click)="activityLevel = opt.value"
+        >
+          <span class="activity-label">{{ opt.label }}</span>
+          <span class="activity-desc">{{ opt.description }}</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title">🔥 Kalorienziel</h2>
+
+      <div class="segmented">
+        <button type="button" [class.active]="calorieMode === 'auto'" (click)="calorieMode = 'auto'">
+          Automatisch berechnen
+        </button>
+        <button type="button" [class.active]="calorieMode === 'manual'" (click)="calorieMode = 'manual'">
+          Ich kenne meinen Wert
+        </button>
+      </div>
+
+      <ng-container *ngIf="calorieMode === 'auto'">
+        <div class="calorie-result" *ngIf="calculatedCalories !== null; else calorieHint">
+          <strong>{{ calculatedCalories }} kcal</strong>
+          <span>geschätzter Tagesbedarf</span>
+        </div>
+        <ng-template #calorieHint>
+          <p class="hint">
+            Bitte Geschlecht, Alter, Größe, Gewicht und dein Aktivitätslevel oben ausfüllen,
+            damit wir deinen Tagesbedarf berechnen können.
+          </p>
+        </ng-template>
+      </ng-container>
+
+      <label class="field" *ngIf="calorieMode === 'manual'">
+        <span>Dein Tagesbedarf (kcal)</span>
+        <input type="number" min="0" step="10" [(ngModel)]="manualCalories" name="manualCalories" placeholder="z.B. 2200" />
+      </label>
+    </section>
+
+    <button class="save-btn" type="submit" [disabled]="saving">
+      {{ saving ? 'Speichert…' : '✅ Profil speichern' }}
+    </button>
+  </form>
+</div>

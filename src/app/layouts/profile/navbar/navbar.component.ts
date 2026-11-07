@@ -24,12 +24,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private sub?: Subscription;
 
   // Panel-Steuerung
-  activePanel: 'none' | 'editProfile' | 'security' | 'help' | 'friends' = 'none';
-
-  // Profil bearbeiten
-  newName = '';
-  editSuccess = '';
-  editError = '';
+  activePanel: 'none' | 'security' | 'help' | 'friends' = 'none';
 
   // Sicherheit
   resetSent = false;
@@ -55,25 +50,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   openPanel(panel: typeof this.activePanel) {
     this.activePanel = this.activePanel === panel ? 'none' : panel;
-    this.editSuccess = this.editError = this.securityError = this.friendError = this.friendSuccess = '';
-    if (panel === 'editProfile') {
-      this.newName = this.auth.currentUser?.displayName ?? '';
-    }
+    this.securityError = this.friendError = this.friendSuccess = '';
   }
 
   goToSettings() { this.router.navigate(['/settings']); }
-
-  async saveName() {
-    if (!this.newName.trim()) { this.editError = 'Name darf nicht leer sein.'; return; }
-    try {
-      await this.auth.updateDisplayName(this.newName.trim());
-      await this.friendsService.saveMyProfile();
-      this.editSuccess = 'Name erfolgreich geändert!';
-      this.editError = '';
-    } catch {
-      this.editError = 'Fehler beim Speichern.';
-    }
-  }
+  goToProfile() { this.router.navigate(['/profile']); }
 
   async sendReset() {
     const email = this.auth.currentUser?.email;

@@ -1,26 +1,37 @@
-header {
+.training-topbar {
+  position: sticky;
+  top: 0;
   display: flex;
   align-items: center;
-  padding-inline: 25px;
-  justify-content: flex-end;
-  height: 40px;
-  position: absolute;
-  right: 0;
-  top: 7px;
-  background-color: #131533;
-  user-select: none;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
   z-index: 100;
+  user-select: none;
+}
+
+.topbar-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-1);
 }
 
 .menu-btn {
-  background-color: transparent;
-  border: none;
-  width: 40px;
-  height: 40px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--text-1);
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-s);
   display: flex;
   align-items: center;
+  justify-content: center;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s;
+
+  &:active { background: var(--accent-dim); }
 }
 
 /* ── Backdrop ── */
@@ -28,6 +39,7 @@ header {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
   z-index: 200;
 }
 
@@ -37,82 +49,125 @@ header {
   top: 0;
   right: 0;
   bottom: 0;
-  width: 260px;
-  background: #0f172a;
+  width: 280px;
+  background: var(--bg-card);
   z-index: 300;
   transform: translateX(100%);
   transition: transform 0.3s ease;
   display: flex;
   flex-direction: column;
-  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.5);
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.25);
+  padding-top: env(safe-area-inset-top);
 
-  &.open {
-    transform: translateX(0);
-  }
+  &.open { transform: translateX(0); }
 }
 
-.drawer-header {
+.drawer-profile {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 20px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 12px;
+  padding: 24px 20px 16px;
+  cursor: pointer;
 }
 
-.drawer-title {
+.drawer-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  font-weight: 700;
   font-size: 16px;
-  font-weight: 600;
-  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+
+  img { width: 100%; height: 100%; object-fit: cover; }
+}
+
+.drawer-profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.drawer-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.drawer-profile-link {
+  font-size: 12px;
+  color: var(--accent);
 }
 
 .drawer-close {
-  background: rgba(255, 255, 255, 0.08);
-  border: none;
-  color: #fff;
-  width: 32px;
-  height: 32px;
+  position: absolute;
+  top: 18px;
+  right: 16px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--text-1);
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.15s;
-
-  &:hover { background: rgba(255, 255, 255, 0.16); }
 }
 
 /* ── Links ── */
 .drawer-links {
   list-style: none;
-  padding: 12px 0;
+  padding: 4px 0;
   margin: 0;
+  border-top: 1px solid var(--border);
 
   li a {
     display: flex;
     align-items: center;
     gap: 14px;
     padding: 14px 20px;
-    color: #d1d5db;
+    color: var(--text-2);
     text-decoration: none;
     font-size: 15px;
     font-weight: 500;
     transition: background 0.15s, color 0.15s;
 
-    &:hover {
-      background: rgba(255, 255, 255, 0.06);
-      color: #fff;
-    }
+    &:hover { background: var(--bg-elevated); color: var(--text-1); }
 
     &.active {
-      color: #5bbcff;
-      background: rgba(91, 188, 255, 0.08);
+      color: var(--accent);
+      background: var(--accent-dim);
     }
   }
 }
 
+.drawer-upgrade {
+  margin: auto 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: var(--radius-m);
+  background: var(--accent);
+  color: white;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+}
+
 .nav-icon {
-  font-size: 20px;
-  width: 28px;
+  font-size: 19px;
+  width: 24px;
   text-align: center;
 }

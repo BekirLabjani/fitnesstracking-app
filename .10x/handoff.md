@@ -1,6 +1,15 @@
 # Current Handoff
 
-**From:** DevOps/SRE (session 8 — premium-camera-tracking)
+**From:** DevOps/SRE (session 9 — nav/burger redesign + full profile page)
+**To:** User
+
+Built and verified (56/56 tests, production build clean) but **not deployed yet**: `firebase deploy --only hosting` (no Firestore rule changes — reuses the existing `userProfiles` owner-write rule for the new fields).
+
+Fixed: clicking "Profil" in the training page's burger menu used to navigate to `/profile`, which rendered a component built for a different use case (a slide-up sheet with a `[open]` input) with no input bound — so it rendered but stayed invisible. `/profile` now opens a real page: body data (gender/age/height/weight), how often you move, and a calorie target — either calculated from that data (Mifflin-St Jeor formula) or typed in directly if you already know it. Also rebuilt the training page's burger-menu drawer to use the app's actual theme colors instead of hardcoded hex, added a profile preview at the top and links to Trainingsplan/Settings/Premium, and fixed a wiring bug where opening the drawer never actually hid the tab bar underneath it.
+
+## History
+
+### DevOps/SRE (session 8 — premium-camera-tracking)
 **To:** User
 
 Two changes, both built and verified (45/45 tests, production build clean) but **not deployed yet**:

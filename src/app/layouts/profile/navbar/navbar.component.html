@@ -4,7 +4,7 @@
     <span class="icon">⚙️</span>
     <span class="label">Settings</span>
   </button>
-  <button class="action-item" (click)="openPanel('editProfile')">
+  <button class="action-item" (click)="goToProfile()">
     <span class="icon">✏️</span>
     <span class="label">Profil bearbeiten</span>
   </button>
@@ -24,18 +24,6 @@
 
 <!-- ── Panel-Bereich ── -->
 <div class="panel" *ngIf="activePanel !== 'none'">
-
-  <!-- Profil bearbeiten -->
-  <ng-container *ngIf="activePanel === 'editProfile'">
-    <h4 class="panel-title">✏️ Profil bearbeiten</h4>
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Anzeigename</mat-label>
-      <input matInput [(ngModel)]="newName" />
-    </mat-form-field>
-    <p class="success" *ngIf="editSuccess">{{ editSuccess }}</p>
-    <p class="error" *ngIf="editError">{{ editError }}</p>
-    <button mat-flat-button color="primary" (click)="saveName()">Speichern</button>
-  </ng-container>
 
   <!-- Sicherheit -->
   <ng-container *ngIf="activePanel === 'security'">

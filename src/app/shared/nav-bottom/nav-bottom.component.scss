@@ -39,7 +39,10 @@
     stroke-width: 2;
   }
 
-  &.active { color: #3B82F6; }
+  &.active {
+    color: #3B82F6;
+    background: rgba(59,130,246,0.12);
+  }
   &:active { transform: scale(0.9); }
 }
 

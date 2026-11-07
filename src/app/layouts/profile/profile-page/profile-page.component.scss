@@ -1,0 +1,150 @@
+.profile-page-full {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  padding-bottom: 40px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  h1 { font-size: 18px; margin: 0; }
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: var(--text-2);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-l);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-2);
+
+  input {
+    padding: 10px 12px;
+    border-radius: var(--radius-s);
+    border: 1px solid var(--border);
+    background: var(--bg-elevated);
+    color: var(--text-1);
+    font-size: 14px;
+  }
+}
+
+.field-row {
+  display: flex;
+  gap: 12px;
+
+  .field { flex: 1; }
+}
+
+.segmented {
+  display: flex;
+  border-radius: var(--radius-s);
+  overflow: hidden;
+  border: 1px solid var(--border);
+
+  button {
+    flex: 1;
+    padding: 10px 8px;
+    border: none;
+    background: var(--bg-elevated);
+    color: var(--text-2);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+
+    &.active { background: var(--accent); color: white; }
+    &:not(:last-child) { border-right: 1px solid var(--border); }
+  }
+}
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.activity-option {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: var(--radius-s);
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+
+  .activity-label { font-size: 14px; font-weight: 700; color: var(--text-1); }
+  .activity-desc { font-size: 12px; color: var(--text-3); }
+
+  &.active {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+  }
+}
+
+.calorie-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 16px;
+  background: var(--accent-dim);
+  border-radius: var(--radius-m);
+
+  strong { font-size: 24px; color: var(--accent); }
+  span { font-size: 12px; color: var(--text-2); }
+}
+
+.hint {
+  font-size: 13px;
+  color: var(--text-3);
+  margin: 0;
+}
+
+.save-btn {
+  padding: 14px;
+  border-radius: var(--radius-s);
+  border: none;
+  background: var(--accent);
+  color: white;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
+}
