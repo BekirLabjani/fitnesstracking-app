@@ -3,7 +3,8 @@ import {
   Auth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   GoogleAuthProvider,
   signOut,
   sendPasswordResetEmail,
@@ -30,8 +31,18 @@ export class AuthServiceService {
     return signInWithEmailAndPassword(this.auth, email, password);
   }
 
+  // Redirect, not popup: Safari's cross-site tracking protection (ITP)
+  // routinely breaks signInWithPopup's storage/postMessage handshake on
+  // iOS, with no clear error — redirect avoids that class of failure
+  // entirely. The result is picked up by handleGoogleRedirectResult()
+  // once the browser navigates back.
   signInWithGoogle() {
-    return signInWithPopup(this.auth, this.googleProvider);
+    return signInWithRedirect(this.auth, this.googleProvider);
+  }
+
+  /** Call once on app startup to complete a signInWithGoogle() redirect, if one is in flight. */
+  handleGoogleRedirectResult() {
+    return getRedirectResult(this.auth);
   }
 
   signOut() {
