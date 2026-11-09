@@ -42,7 +42,9 @@ export class TrainingBodyComponent implements OnInit, OnDestroy {
   private loadHeight() {
     const uid = this.fireAuth.currentUser?.uid;
     if (!uid) return;
-    this.profileUnsub = onSnapshot(doc(this.db, 'userProfiles', uid), snap => {
+    // `users`, not `userProfiles` — height is private body data, not a
+    // field every signed-in user can read (see security review).
+    this.profileUnsub = onSnapshot(doc(this.db, 'users', uid), snap => {
       this.heightCm = snap.data()?.['heightCm'] ?? 0;
     });
   }
@@ -50,7 +52,7 @@ export class TrainingBodyComponent implements OnInit, OnDestroy {
   async saveHeight() {
     const uid = this.fireAuth.currentUser?.uid;
     if (!uid || !this.heightInput) return;
-    await setDoc(doc(this.db, 'userProfiles', uid), { heightCm: this.heightInput }, { merge: true });
+    await setDoc(doc(this.db, 'users', uid), { heightCm: this.heightInput }, { merge: true });
     this.editingHeight = false;
   }
 

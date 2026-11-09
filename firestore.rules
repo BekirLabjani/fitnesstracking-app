@@ -3,17 +3,24 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Nutzer dürfen nur ihre eigenen Daten lesen und schreiben
+    // Private Profildaten (Alter, Geschlecht, Größe, Gewicht, Aktivitäts-
+    // level, Kalorienziel): nur vom Besitzer lesbar/schreibbar — anders als
+    // `userProfiles` unten, das für Freundessuche für alle lesbar sein muss.
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
 
-    // Öffentliche Profil-Felder (Name, Invite-Code, Avatar, Größe):
-    // lesbar für alle eingeloggten Nutzer (nötig für Freundessuche & Freundesliste),
-    // schreibbar nur vom Besitzer.
+    // Öffentliche Profil-Felder (Name, Invite-Code, Avatar): lesbar für alle
+    // eingeloggten Nutzer (nötig für Freundessuche & Freundesliste),
+    // schreibbar nur vom Besitzer. `hasOnly` verhindert, dass hier je wieder
+    // Gesundheitsdaten (Alter/Gewicht/Größe/Aktivität/Kalorien) landen — die
+    // gehören ins besitzer-only `users`-Dokument unten. Vorher lagen sie
+    // versehentlich hier und waren dadurch für JEDEN eingeloggten Nutzer per
+    // ungefilterter Collection-Abfrage auslesbar (siehe Security-Review).
     match /userProfiles/{userId} {
       allow read: if request.auth != null;
-      allow write: if request.auth != null && request.auth.uid == userId;
+      allow write: if request.auth != null && request.auth.uid == userId
+        && request.resource.data.keys().hasOnly(['displayName', 'photoUrl', 'photoBase64', 'codePrefix']);
     }
 
     // Freundschaftsbeziehungen: Dokument-ID ist deterministisch
